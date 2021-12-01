@@ -5,16 +5,29 @@
 /// 
 ///v1.0 - December 1st, 2021: Inital project
 
+//Winsock includes
+#define _WIN32_WINNT 0x6000
+
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <stdio.h>
+
+#pragma comment(lib, "ws2_32.lib")
+
+//Includes
 #include <string.h>
 
+//Defines 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
 
-typedef struct ADDRESS_INFO
+
+typedef enum connection_type
 {
-	char target_ip_address[IP_ADDRESS_MAX];
-	char target_port[PORT_NUMBER_MAX]
+	TCP, UDP
 
-} *address_info_ptr;
+}connection_type;
 
- address_info_ptr* ConfigureTargetAddress(char[], char[]);
+struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
+
+SOCKET CreateConnectionWithTargetSocket(address_info_ptr);
