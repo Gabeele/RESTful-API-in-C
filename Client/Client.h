@@ -6,6 +6,8 @@
 ///v1.0 - December 1st, 2021: Inital project
 
 //Winsock includes
+#pragma once
+
 #define _WIN32_WINNT 0x6000
 
 #include <WinSock2.h>

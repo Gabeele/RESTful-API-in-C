@@ -37,7 +37,7 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 
 	sock = socket(address->ai_family, address->ai_socktype, address->ai_protocol);	//Creates a socket based on the target address
 
-	if (!sock) {
+	if (sock == INVALID_SOCKET) {
 		fprintf(stderr, "Error: Failed to configure target socket\n");
 		exit(1);
 	}
@@ -61,7 +61,7 @@ void printTargetAddress(struct addrinfo* address) {
 
 	getnameinfo(address->ai_addr, address->ai_addrlen, address_buff, sizeof(address_buff), service_buff, sizeof(service_buff), NI_NUMERICHOST);	//Sets the address and service information to a string
 
-	printf("Target address is: %s\t%s", address_buff, service_buff);
+	printf("Target address is: %s\t%s\n", address_buff, service_buff);
 }
 
 
