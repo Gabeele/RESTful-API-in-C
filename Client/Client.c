@@ -26,10 +26,20 @@ struct addrinfo* ConfigureTargetAddress(char ip[], char port[], connection_type 
 		 exit(1);
 	 }
 
-
+	 printTargetAddress(target_address);
 
 	 return target_address;
 
+}
+
+void printTargetAddress(struct addrinfo* address) {
+
+	char address_buff[STRING_BUFFER];
+	char service_buff[STRING_BUFFER];
+
+	getnameinfo(address->ai_addr, address->ai_addrlen, address_buff, sizeof(address_buff), service_buff, sizeof(service_buff), NI_NUMERICHOST);	//Sets the address and service information to a string
+
+	printf("Target address is: %s\t%s", address_buff, service_buff);
 }
 
 

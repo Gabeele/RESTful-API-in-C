@@ -20,6 +20,7 @@
 //Defines 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
+#define STRING_BUFFER 100
 
 
 typedef enum connection_type
@@ -29,5 +30,7 @@ typedef enum connection_type
 }connection_type;
 
 struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
+
+void printTargetAddress(struct addrinfo*);
 
 SOCKET CreateConnectionWithTargetSocket(address_info_ptr);
