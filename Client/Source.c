@@ -21,6 +21,8 @@ void main() {
 
 	struct addrinfo* target_address = ConfigureTargetAddress("127.0.0.1", "8080", TCP);
 
+	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
+
 	
 	
 	WSACleanup();

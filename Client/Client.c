@@ -32,6 +32,28 @@ struct addrinfo* ConfigureTargetAddress(char ip[], char port[], connection_type 
 
 }
 
+SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
+	SOCKET sock;
+
+	sock = socket(address->ai_family, address->ai_socktype, address->ai_protocol);	//Creates a socket based on the target address
+
+	if (!sock) {
+		fprintf(stderr, "Error: Failed to configure target socket\n");
+		exit(1);
+	}
+
+	if (connect(sock, address->ai_addr, address->ai_addrlen)) {
+		fprintf(stderr, "Error: Failed to connect target socket\n");
+		exit(1);
+	}
+
+	free(address);
+
+	return sock;
+}
+
+//Printing Functions
+
 void printTargetAddress(struct addrinfo* address) {
 
 	char address_buff[STRING_BUFFER];

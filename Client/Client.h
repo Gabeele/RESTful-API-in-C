@@ -33,4 +33,4 @@ struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
 
 void printTargetAddress(struct addrinfo*);
 
-SOCKET CreateConnectionWithTargetSocket(address_info_ptr);
+SOCKET CreateConnectionToTargetSocket(struct addrinfo*);
