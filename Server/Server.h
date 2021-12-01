@@ -27,3 +27,5 @@ struct addrinfo* ConfigureLocalAddress();
 SOCKET CreateListeningSocket(struct addrinfo*);
 
 void ConnectionListen(SOCKET);
+
+SOCKET WaitAndConnect(SOCKET);

@@ -23,7 +23,27 @@ void main() {
 
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
+
+	//Send a message 
+	char* message = "Hello world :)";
+
+	if (send(target_socket, message, strlen(message), 0) == 0) {
+		printf("Sent failed");
+		exit(1);
+	}
+
+	char reply[STRING_BUFFER];
+	memset(reply, '\0', STRING_BUFFER);
+
+	while (recv(target_socket, reply, STRING_BUFFER, 0)== 0);
 	
+	int bytes_received = recv(accept, reply, STRING_BUFFER, 0);
+
+	printf("%.*s", bytes_received, reply);
+
+
+
+
 	
 	WSACleanup();
 	return 0;

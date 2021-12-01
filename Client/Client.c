@@ -47,7 +47,7 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 		exit(1);
 	}
 
-	free(address);
+	//free(address);
 
 	return sock;
 }

@@ -39,7 +39,7 @@ SOCKET CreateListeningSocket(struct addrinfo* address) {
 		exit(1);
 	}
 
-	free(address);
+	//free(address);
 
 	return sock;
 
@@ -54,3 +54,25 @@ void ConnectionListen(SOCKET socket) {
 
 }
 
+SOCKET WaitAndConnect(SOCKET socket) {
+	struct sockaddr_storage client_address;
+	struct sockaddr* socket_address_client = (struct sockaddr*)&client_address;
+	socklen_t length_of_client;
+	SOCKET client_socket;
+	char address_buffer[STRING_BUFFER];
+
+	length_of_client = sizeof(client_address);
+
+	client_socket = accept(socket, socket_address_client, &length_of_client);	//Accepts the first of the threeway handshake
+
+	if (client_socket == INVALID_SOCKET) {
+		fprintf(stderr, "Error: Accepted failed\n");
+		exit(1);
+	}
+
+	getnameinfo(socket_address_client, length_of_client, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
+
+	printf("Client address is: %s", address_buffer);
+
+	return client_socket;
+}
