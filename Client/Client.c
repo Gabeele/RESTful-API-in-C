@@ -47,10 +47,41 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 		exit(1);
 	}
 
-	//free(address);
+	freeaddrinfo(address);
 
 	return sock;
 }
+
+void SendMessageToSocket(char message[], SOCKET target_socket) {
+
+	if (send(target_socket, message, strlen(message), 0) == 0) {
+		printf("Error: Send failed on client side\n");
+		exit(1);
+	}
+
+}
+
+void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
+
+	while (recv(target_socket, message, STRING_BUFFER, 0) == 0);
+
+	int bytes_received = recv(accept, message, STRING_BUFFER, 0);
+
+	printf("%.*s\n", bytes_received, message);
+
+}
+
+void CloseSocketConnection(SOCKET socket) {
+
+	closesocket(socket);
+
+}
+
+void WindowsSocketsCleanUp() {
+
+	WSACleanup();
+}
+
 
 //Printing Functions
 

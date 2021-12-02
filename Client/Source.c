@@ -13,7 +13,7 @@ void main() {
 	WSADATA data;
 
 	if (WSAStartup(MAKEWORD(2, 2), &data)) {
-		fprintf(stderr, "Error: Failed to initlize\n");
+		fprintf(stderr, "Error: Failed to initialize\n");
 		return 1;
 	}
 
@@ -23,28 +23,13 @@ void main() {
 
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
-
-	//Send a message 
-	char* message = "Hello world :)";
-
-	if (send(target_socket, message, strlen(message), 0) == 0) {
-		printf("Sent failed");
-		exit(1);
-	}
-
-	char reply[STRING_BUFFER];
-	memset(reply, '\0', STRING_BUFFER);
-
-	while (recv(target_socket, reply, STRING_BUFFER, 0)== 0);
-	
-	int bytes_received = recv(accept, reply, STRING_BUFFER, 0);
-
-	printf("%.*s", bytes_received, reply);
+	char buf[STRING_BUFFER] = "";
 
 
+	ReceiveMessageFromSocket(buf, target_socket);
 
 
-	
-	WSACleanup();
+	CloseSocketConnection(target_socket);
+	WindowsSocketsCleanUp();
 	return 0;
 }

@@ -39,7 +39,7 @@ SOCKET CreateListeningSocket(struct addrinfo* address) {
 		exit(1);
 	}
 
-	//free(address);
+	freeaddrinfo(address);
 
 	return sock;
 
@@ -59,7 +59,7 @@ SOCKET WaitAndConnect(SOCKET socket) {
 	struct sockaddr* socket_address_client = (struct sockaddr*)&client_address;
 	socklen_t length_of_client;
 	SOCKET client_socket;
-	char address_buffer[STRING_BUFFER];
+	char address_buffer[IP_ADDRESS_MAX];
 
 	length_of_client = sizeof(client_address);
 
@@ -72,7 +72,37 @@ SOCKET WaitAndConnect(SOCKET socket) {
 
 	getnameinfo(socket_address_client, length_of_client, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
 
-	printf("Client address is: %s", address_buffer);
+	printf("Client address is: %s\n", address_buffer);
 
 	return client_socket;
+}
+
+void SendMessageToSocket(char message[], SOCKET target_socket) {
+
+	if (send(target_socket, message, strlen(message), 0) == 0) {
+		printf("Error: Send failed on client side\n");
+		exit(1);
+	}
+
+}
+
+void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
+
+	while (recv(target_socket, message, STRING_BUFFER, 0) == 0);
+
+	int bytes_received = recv(accept, message, STRING_BUFFER, 0);
+
+	printf("%.*s\n", bytes_received, message);
+
+}
+
+void CloseSocketConnection(SOCKET socket) {
+
+	closesocket(socket);
+
+}
+
+void WindowsSocketsCleanUp() {
+
+	WSACleanup();
 }

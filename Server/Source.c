@@ -25,31 +25,11 @@ int main(void) {
 
 	ConnectionListen(server_socket);
 
-	SOCKET accept = WaitAndConnect(server_socket);	//Accept is the client socket
+	SOCKET client_socket = WaitAndConnect(server_socket);	
 
+	SendMessageToSocket("Hello There", client_socket);
 
-	//Obtain the message
-	char request[STRING_BUFFER];
-
-	int bytes_received = recv(accept, request, STRING_BUFFER, 0);
-
-	printf("%.*s", bytes_received, request);
-
-
-	//Send a message back
-
-	char* message = "Hello :>";
-
-	if (send(accept, message, strlen(message), 0) == 0) {
-		printf("Sent failed");
-		exit(1);
-	}
-
-	int x = 1;
-		while (x = 1) {};
-
-	
-	WSACleanup();
-
-	return 1;
+	CloseSocketConnection(client_socket);
+	WindowsSocketsCleanUp();
+	return 0;
 }

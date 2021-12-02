@@ -33,6 +33,14 @@ typedef enum connection_type
 
 struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
 
-void printTargetAddress(struct addrinfo*);
-
 SOCKET CreateConnectionToTargetSocket(struct addrinfo*);
+
+void SendMessageToSocket(char[], SOCKET);
+
+void ReceiveMessageFromSocket(char[], SOCKET);
+
+void CloseSocketConnection(SOCKET);
+
+void WindowsSocketsCleanUp();
+
+void printTargetAddress(struct addrinfo*);

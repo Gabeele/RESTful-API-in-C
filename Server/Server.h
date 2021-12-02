@@ -29,3 +29,12 @@ SOCKET CreateListeningSocket(struct addrinfo*);
 void ConnectionListen(SOCKET);
 
 SOCKET WaitAndConnect(SOCKET);
+
+void CloseSocketConnection(SOCKET);
+
+void WindowsSocketsCleanUp();
+
+
+void SendMessageToSocket(char[], SOCKET );
+
+void ReceiveMessageFromSocket(char[], SOCKET);
