@@ -5,8 +5,8 @@
 /// 
 ///v1.0 - December 1st, 2021: Inital project
 
+#include "UI.h"
 
-#include "Client.h"
 
 void main() {
 
@@ -14,17 +14,21 @@ void main() {
 
 	//Client
 
-	struct addrinfo* target_address = ConfigureTargetAddress("127.0.0.1", "8080", TCP);
+	struct addrinfo* target_address = ConfigureTargetAddress("127.0.0.1", "8080");
 
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
-	char buf[STRING_BUFFER];
-	memset(buf, '\0', STRING_BUFFER);
+	menu();
+
+	char buf[STRING_BUFFER] = "";
+	//memset(buf, '\0', STRING_BUFFER);
 
 
-	SendMessageToSocket("Hello There, sending from the client", target_socket);
+	//send a post message
 
-	ReceiveMessageFromSocket(buf, target_socket);
+	//SendMessageToSocket("POST://", target_socket);
+
+	//ReceiveMessageFromSocket(buf, target_socket);
 
 
 

@@ -6,9 +6,13 @@
 ///v1.0 - December 1st, 2021: Inital project
 
 
+
+#include "PostingList.h"
 #include "Server.h"
 
 int main(void) {
+
+	p_ListOfPostings list = readListFromFile();
 
 	InitlaizeWindowsSockets();
 
@@ -18,13 +22,17 @@ int main(void) {
 
 	ConnectionListen(server_socket);
 
-	SOCKET client_socket = WaitAndConnect(server_socket);	
+	//SOCKET client_socket = WaitAndConnect(server_socket);	
 
 	char message[STRING_BUFFER];
 
-	ReceiveMessageAndRespondFromSocket(message, client_socket);
+	//ReceiveMessageAndRespondFromSocket(message, client_socket);
 
-	CloseSocketConnection(client_socket);
+	addToList(list, "Gavin", "Plants");
+	addToList(list, "Baxter", "Korea");
+
+	saveListToFile(list);
+	//CloseSocketConnection(client_socket);
 	WindowsSocketsCleanUp();
 	return 0;
 }

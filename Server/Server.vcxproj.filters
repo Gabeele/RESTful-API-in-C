@@ -21,9 +21,27 @@
     <ClCompile Include="Server.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PostingList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PostNode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Posting.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PostingList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PostNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Posting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

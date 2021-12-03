@@ -139,10 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Posting.c" />
+    <ClCompile Include="PostingList.c" />
+    <ClCompile Include="PostNode.c" />
     <ClCompile Include="Server.c" />
     <ClCompile Include="Source.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Posting.h" />
+    <ClInclude Include="PostingList.h" />
+    <ClInclude Include="PostNode.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

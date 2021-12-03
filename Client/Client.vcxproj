@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="Client.c" />
     <ClCompile Include="Source.c" />
+    <ClCompile Include="UI.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

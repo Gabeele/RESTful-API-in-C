@@ -26,15 +26,11 @@
 #define STRING_BUFFER 250
 
 
-typedef enum connection_type
-{
-	TCP, UDP
 
-}connection_type;
 
 void InitlaizeWindowsSockets();
 
-struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
+struct addrinfo* ConfigureTargetAddress(char[], char[]);
 
 SOCKET CreateConnectionToTargetSocket(struct addrinfo*);
 

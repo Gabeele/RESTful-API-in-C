@@ -21,9 +21,15 @@
     <ClCompile Include="Client.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,20 +18,15 @@ void InitlaizeWindowsSockets() {
 
 }
 
-struct addrinfo* ConfigureTargetAddress(char ip[], char port[], connection_type type) {
+struct addrinfo* ConfigureTargetAddress(char ip[], char port[]) {
 	
 	ADDRINFO type_info;
 	ADDRINFO *target_address;
 
-	memset(&type_info, 0, sizeof(type_info));	//Create a container the size of addrinfo
+	memset(&type_info, 0, sizeof(type_info)); 
 
-	 if (type == TCP) {		//Sets the type of socket to TCP or UDP protocol
-		 type_info.ai_socktype = SOCK_STREAM;
-	 }
-	 else if (type == UDP) {
-		 type_info.ai_socktype = SOCK_DGRAM;
-	 }
-	 	 
+		 type_info.ai_socktype = SOCK_STREAM;	//Using TCP for RESTful services
+
 	 if (getaddrinfo(ip, port, &type_info, &target_address)) {
 		 fprintf(stderr, "Error: Failed to configure target address\n");
 		 exit(1);
