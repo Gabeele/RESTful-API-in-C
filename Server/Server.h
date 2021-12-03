@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #pragma once
 
 #define _WIN32_WINNT 0x6000
@@ -13,7 +14,7 @@
 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
-#define STRING_BUFFER 100
+#define STRING_BUFFER 250
 #define MAXLISTENERS 10
 
 typedef enum connection_type
@@ -21,6 +22,8 @@ typedef enum connection_type
 	TCP, UDP
 
 }connection_type;
+
+void InitlaizeWindowsSockets();
 
 struct addrinfo* ConfigureLocalAddress();
 
@@ -37,4 +40,4 @@ void WindowsSocketsCleanUp();
 
 void SendMessageToSocket(char[], SOCKET );
 
-void ReceiveMessageFromSocket(char[], SOCKET);
+void ReceiveMessageAndRespondFromSocket(char[], SOCKET);

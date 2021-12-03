@@ -10,14 +10,7 @@
 
 int main(void) {
 
-	WSADATA data;
-
-	if (WSAStartup(MAKEWORD(2, 2), &data)) {
-		fprintf(stderr, "Error: Failed to initlize\n");
-		return 1;
-	}
-
-	//Server
+	InitlaizeWindowsSockets();
 
 	struct addrinfo* server_address = ConfigureLocalAddress();
 
@@ -27,7 +20,9 @@ int main(void) {
 
 	SOCKET client_socket = WaitAndConnect(server_socket);	
 
-	SendMessageToSocket("Hello There", client_socket);
+	char message[STRING_BUFFER];
+
+	ReceiveMessageAndRespondFromSocket(message, client_socket);
 
 	CloseSocketConnection(client_socket);
 	WindowsSocketsCleanUp();

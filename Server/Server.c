@@ -7,6 +7,18 @@
 
 #include "Server.h"
 
+
+void InitlaizeWindowsSockets() {
+
+	WSADATA data;
+	if (WSAStartup(MAKEWORD(2, 2), &data))
+	{
+		fprintf(stderr, "Error: Failed to initialize\n");
+		exit(1);
+	}
+
+}
+
 struct addrinfo* ConfigureLocalAddress() {
 	char ip_address[IP_ADDRESS_MAX] = "";
 	char port[PORT_NUMBER_MAX] = "8080";
@@ -86,13 +98,27 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 }
 
-void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
+void ReceiveMessageAndRespondFromSocket(char message[], SOCKET target_socket) {
 
-	while (recv(target_socket, message, STRING_BUFFER, 0) == 0);
-
-	int bytes_received = recv(accept, message, STRING_BUFFER, 0);
+	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
 	printf("%.*s\n", bytes_received, message);
+
+	const char* response =
+		"HTTP/1.1 200 OK\r\n"
+		"Connection: close\r\n"
+		"Content-Type: text/plain\r\n\r\n"
+		"PLACEHOLDER FOR RESPONSE";
+
+	char data_message[STRING_BUFFER] = "Got it";
+
+	char buffer[STRING_BUFFER];
+
+	sprintf(buffer, "%s %s\n\0\0", response, data_message);
+
+	int bytes_sent = send(target_socket, buffer, strlen(buffer), 0);
+
+	printf("Response: %.*s\n", bytes_received, buffer);
 
 }
 

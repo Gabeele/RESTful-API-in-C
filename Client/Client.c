@@ -7,6 +7,17 @@
 
 #include "Client.h"
 
+void InitlaizeWindowsSockets() {
+
+	WSADATA data;
+	if (WSAStartup(MAKEWORD(2, 2), &data))
+	{
+		fprintf(stderr, "Error: Failed to initialize\n");
+		exit(1);
+	}
+
+}
+
 struct addrinfo* ConfigureTargetAddress(char ip[], char port[], connection_type type) {
 	
 	ADDRINFO type_info;
@@ -63,11 +74,10 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
-	while (recv(target_socket, message, STRING_BUFFER, 0) == 0);
+	while (recv(target_socket, message, STRING_BUFFER, 0) != 0)
+		;
 
-	int bytes_received = recv(accept, message, STRING_BUFFER, 0);
-
-	printf("%.*s\n", bytes_received, message);
+	printf("%s", message);
 
 }
 

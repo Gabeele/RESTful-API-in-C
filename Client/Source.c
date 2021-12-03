@@ -10,12 +10,7 @@
 
 void main() {
 
-	WSADATA data;
-
-	if (WSAStartup(MAKEWORD(2, 2), &data)) {
-		fprintf(stderr, "Error: Failed to initialize\n");
-		return 1;
-	}
+	InitlaizeWindowsSockets();
 
 	//Client
 
@@ -23,10 +18,14 @@ void main() {
 
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
-	char buf[STRING_BUFFER] = "";
+	char buf[STRING_BUFFER];
+	memset(buf, '\0', STRING_BUFFER);
 
+
+	SendMessageToSocket("Hello There, sending from the client", target_socket);
 
 	ReceiveMessageFromSocket(buf, target_socket);
+
 
 
 	CloseSocketConnection(target_socket);

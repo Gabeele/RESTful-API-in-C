@@ -6,6 +6,7 @@
 ///v1.0 - December 1st, 2021: Inital project
 
 //Winsock includes
+#define _CRT_SECURE_NO_WARNINGS
 #pragma once
 
 #define _WIN32_WINNT 0x6000
@@ -22,7 +23,7 @@
 //Defines 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
-#define STRING_BUFFER 100
+#define STRING_BUFFER 250
 
 
 typedef enum connection_type
@@ -30,6 +31,8 @@ typedef enum connection_type
 	TCP, UDP
 
 }connection_type;
+
+void InitlaizeWindowsSockets();
 
 struct addrinfo* ConfigureTargetAddress(char[], char[], connection_type);
 
