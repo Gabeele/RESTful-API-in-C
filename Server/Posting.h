@@ -8,13 +8,17 @@
 
 #define STRING_MAX 250
 
-typedef struct POST {
+typedef struct post {
 	int postingID;
 	char author[STRING_MAX];
 	char topic[STRING_MAX];
 
-}*p_Post;
+}*p_POST, POST;
 
-p_Post createPost(int, char[], char[]);
+POST createPost(int, char[], char[]);
 
+int getPostingID(POST);
 
+char* getAuthor(POST);
+
+char* getTopic(POST);

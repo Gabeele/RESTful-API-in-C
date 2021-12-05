@@ -1,8 +1,9 @@
 #include "PostNode.h"
 
-p_PostNode createNode(p_Post post) {
+p_POSTNODE createNode(POST post) {
 
-	p_PostNode node = (p_PostNode)malloc(sizeof(p_PostNode));
+	p_POSTNODE node = (p_POSTNODE)malloc(sizeof(POSTNODE));
+
 	if (node == NULL) {
 		exit(1);
 	}

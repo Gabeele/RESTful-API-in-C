@@ -1,17 +1,30 @@
 #include "Posting.h"
 
 
-p_Post createPost(int id, char author[], char topic[]) {
-	p_Post post = (p_Post)malloc(sizeof(p_Post));
-	if (post == NULL) {
-		exit(1);
-	}
+POST createPost(int id, char author[], char topic[]) {
 
-	post->postingID = id;
+	POST post;
 
-	strcpy_s(post->author, STRING_MAX, author);
+	post.postingID = id;
 
-	strcpy_s(post->topic, STRING_MAX, topic);
+	strcpy_s(post.author, STRING_MAX, author);
+
+	strcpy_s(post.topic, STRING_MAX, topic);
 	
 	return post;
+}
+
+int getPostingID(POST post) {
+
+	return post.postingID;
+}
+
+char* getAuthor(POST post) {
+
+	return post.author;
+}
+
+char* getTopic(POST post) {
+
+	return post.topic;
 }

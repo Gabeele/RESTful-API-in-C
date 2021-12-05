@@ -12,7 +12,9 @@
 
 int main(void) {
 
-	p_ListOfPostings list = readListFromFile();
+	LISTOFPOSTINGS list = readListFromFile();
+
+	//LISTOFPOSTINGS list = initalizeListOfPosts();
 
 	InitlaizeWindowsSockets();
 
@@ -28,10 +30,10 @@ int main(void) {
 
 	//ReceiveMessageAndRespondFromSocket(message, client_socket);
 
-	addToList(list, "Gavin", "Plants");
-	addToList(list, "Baxter", "Korea");
-
-	saveListToFile(list);
+	addToList(&list, "Gavin", "Plants");
+	addToList(&list, "Baxter", "Korea");
+	
+	saveListToFile(&list);
 	//CloseSocketConnection(client_socket);
 	WindowsSocketsCleanUp();
 	return 0;

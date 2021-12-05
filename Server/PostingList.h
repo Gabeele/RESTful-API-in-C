@@ -3,25 +3,27 @@
 #include "PostNode.h"
 
 
-typedef struct LISTOFPOSTINGS {
+typedef struct listOfPostings {
 	int maxID;
-	p_PostNode head;
+	struct POSTNODE* head;
 
-}*p_ListOfPostings;
+}*p_LISTOFPOSTINGS, LISTOFPOSTINGS;
 
-p_ListOfPostings initalizeListOfPosts();
+LISTOFPOSTINGS initalizeListOfPosts();
 
-void addToList(p_ListOfPostings, char[], char[]);
+void addToList(p_LISTOFPOSTINGS, char[], char[]);
 
-void deleteFromList(p_ListOfPostings);
+void deleteFromList(p_LISTOFPOSTINGS, int);
 
-int getLength(p_ListOfPostings);
+int getLength(p_LISTOFPOSTINGS);
 
-p_PostNode searchForNode(p_ListOfPostings, int);
+p_POSTNODE searchForNode(p_LISTOFPOSTINGS, int);
 
-void saveListToFile(p_ListOfPostings);
+void saveListToFile(p_LISTOFPOSTINGS);
 
-p_ListOfPostings readListFromFile();
+LISTOFPOSTINGS readListFromFile();
+
+
 
 
 

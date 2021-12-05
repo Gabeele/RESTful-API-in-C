@@ -2,13 +2,13 @@
 
 #include "Posting.h"
 
-typedef struct POSTNODE {
-	p_Post data;
-	p_Post next_node;
+typedef struct postNode {
+	struct post data;
+	struct POSTNODE* next_node;
 
-}*p_PostNode;
+}*p_POSTNODE, POSTNODE;
 
-p_PostNode createNode(p_Post);
+p_POSTNODE createNode(Post);
 
 
 

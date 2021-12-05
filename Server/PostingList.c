@@ -1,30 +1,34 @@
 #include "PostingList.h"
 
-p_ListOfPostings initalizeListOfPosts() {
+LISTOFPOSTINGS initalizeListOfPosts() {
 
-	p_ListOfPostings list = (p_ListOfPostings)malloc(sizeof(p_ListOfPostings));
-	if (list == NULL) {
-		exit(1);
-	}
+	//p_ListOfPostings list = (p_ListOfPostings)malloc(sizeof(p_ListOfPostings));
+	//if (list == NULL) {
+	//	exit(1);
+	//}
 
-	list->head = NULL;
+	LISTOFPOSTINGS list;
 
-	list->maxID = 0;
+	list.head = NULL;
+
+	list.maxID = 0;
 
 	return list;
 }
 
-void addToList(p_ListOfPostings list, char author[], char topic[]) {
+void addToList(p_LISTOFPOSTINGS list, char author[], char topic[]) {
+	int id = ++list->maxID;
 
-	p_Post posting = createPost(++list->maxID, author, topic);
-	p_PostNode node = createNode(posting);
+	POST posting = createPost(id, author, topic);
+
+	p_POSTNODE node = createNode(posting);
 
 	if (list->head == NULL) {
 
 		list->head = node;
 	}
 	else {
-		p_PostNode currentNode = list->head;
+		p_POSTNODE currentNode = list->head;
 
 		while (currentNode->next_node != NULL) {
 
@@ -36,18 +40,27 @@ void addToList(p_ListOfPostings list, char author[], char topic[]) {
 
 }
 
-void deleteFromList(p_ListOfPostings list, int key) {
+void deleteFromList(p_LISTOFPOSTINGS list, int key) {
 
-	p_PostNode nodeToDelete = searchForNode(list, key);
+	p_POSTNODE nodeToDelete = searchForNode(list, key);
 
-	if (nodeToDelete == list->head) {
+	p_POSTNODE currentNode = list->head;
 
-		list->head = NULL;
+	if (nodeToDelete == currentNode) {
 
+		if (currentNode->next_node != NULL) {
+
+			list->head = currentNode->next_node;
+
+		}
+		else {
+
+			list->head = NULL;
+
+		}
+		
 	}
 	else {
-
-		p_PostNode currentNode = list->head;
 
 		while (currentNode->next_node != nodeToDelete) {
 
@@ -61,10 +74,10 @@ void deleteFromList(p_ListOfPostings list, int key) {
 	free(nodeToDelete);	//Might have to make a delete for this
 }
 
-int getLength(p_ListOfPostings list) {
+int getLength(p_LISTOFPOSTINGS list) {
 
 	int counter = 0;
-	p_PostNode currentNode = list->head;
+	p_POSTNODE currentNode = list->head;
 
 	while (currentNode->next_node != NULL) {
 		counter++;
@@ -74,16 +87,16 @@ int getLength(p_ListOfPostings list) {
 		return counter;
 }
 
-p_PostNode searchForNode(p_ListOfPostings list, int key) {
+p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 
-	p_PostNode node = list->head;
+	p_POSTNODE node = list->head;
 
-	while (node->data->postingID != key) {
+	while (getPostingID(node->data) != key) {
 		
 		node = node->next_node;
 	}
 
-	if (node->data->postingID == key) {
+	if (getPostingID(node->data) == key) {
 		return node;
 	}
 	else {
@@ -93,10 +106,10 @@ p_PostNode searchForNode(p_ListOfPostings list, int key) {
 }
 
 
-void saveListToFile(p_ListOfPostings list) {
+void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
-	filePointer = fopen_s(&filePointer, "PostingList.txt", "w");
+	fopen_s(&filePointer, "PostingList.txt", "w+");
 
 	if (filePointer == NULL) {
 		printf("Error: File creating and saving sensed an error");
@@ -105,11 +118,11 @@ void saveListToFile(p_ListOfPostings list) {
 
 	fprintf(filePointer, "%d\n", list->maxID);
 
-	p_PostNode node = list->head;
+	p_POSTNODE node = list->head;
 
 	do{
 	
-		fprintf(filePointer, "%d %s %s\n", node->data->postingID, node->data->author, node->data->topic);
+		fprintf(filePointer, "%d %s %s\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
 		
 		node = node->next_node;
 
@@ -118,35 +131,38 @@ void saveListToFile(p_ListOfPostings list) {
 	fclose(filePointer);
 }
 
-p_ListOfPostings readListFromFile() {
+LISTOFPOSTINGS readListFromFile() {
 
 	int tempID = 0;
 	char tempAuthor[STRING_MAX] = "";
 	char tempTopic[STRING_MAX] = "";
+	char buf[STRING_MAX];
 
-	p_ListOfPostings list = initalizeListOfPosts();
+	LISTOFPOSTINGS list = initalizeListOfPosts();
 
 	FILE* filePointer;
-	filePointer = fopen( "PostingList.txt", "r");
+	fopen_s(&filePointer, "PostingList.txt", "r");
 
 	if (filePointer == NULL) {
 		printf("Error: File does not exists");
 		return list;
 	}
 
-	fscanf_s(filePointer, "%d\n", list->maxID);
+	fscanf_s(filePointer, "%d\n", &list.maxID);
 
-	while (filePointer != EOF) {
-		fscanf_s(filePointer, "%d %s %s\n", tempID, tempAuthor, tempTopic);
+	while (fscanf(filePointer, "%d %s %s\n", &tempID, tempAuthor, tempTopic) != EOF) {
+		//fscanf(filePointer, "%d %s %s\n", &tempID, tempAuthor, tempTopic);
 
-		p_Post post = createPost(tempID, tempAuthor, tempTopic);
-		p_PostNode node = createNode(post);
+		// &tempID, tempAuthor, tempTopic
 
-		if (list->head == NULL) {
-			list->head = node;
+		POST post = createPost(tempID, tempAuthor, tempTopic);
+		p_POSTNODE node = createNode(post);
+
+		if (list.head == NULL) {
+			list.head = node;
 		}
 		else {
-			p_PostNode currentNode = list->head;
+			p_POSTNODE currentNode = list.head;
 
 			while (currentNode->next_node != NULL) {
 
