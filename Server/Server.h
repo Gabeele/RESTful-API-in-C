@@ -10,6 +10,7 @@
 #pragma comment(lib, "ws2_32.lib")
 
 //Includes
+
 #include <string.h>
 
 #define IP_ADDRESS_MAX 16
@@ -37,7 +38,8 @@ void CloseSocketConnection(SOCKET);
 
 void WindowsSocketsCleanUp();
 
-
 void SendMessageToSocket(char[], SOCKET );
 
-void ReceiveMessageAndRespondFromSocket(char[], SOCKET);
+int ReceiveMessage(char[], SOCKET);
+
+void RespondToClient(char[], SOCKET);

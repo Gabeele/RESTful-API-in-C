@@ -12,25 +12,32 @@ void main() {
 
 	InitlaizeWindowsSockets();
 
-	//Client
-
 	struct addrinfo* target_address = ConfigureTargetAddress("127.0.0.1", "8080");
 
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
-	menu();
+	
 
-	char buf[STRING_BUFFER] = "";
-	//memset(buf, '\0', STRING_BUFFER);
-
+	char message[STRING_BUFFER];
 
 	//send a post message
+	char input = getchar();
 
-	//SendMessageToSocket("POST://", target_socket);
+	while (input != 'axit') {
 
-	//ReceiveMessageFromSocket(buf, target_socket);
+		menu();
 
+		
 
+		SendMessageToSocket(message, target_socket);
+		char buf[STRING_BUFFER];
+
+		memset(buf, '\0', STRING_BUFFER);
+		ReceiveMessageFromSocket(buf, target_socket);
+
+		
+
+	}
 
 	CloseSocketConnection(target_socket);
 	WindowsSocketsCleanUp();

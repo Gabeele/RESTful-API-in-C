@@ -22,3 +22,7 @@ int getPostingID(POST);
 char* getAuthor(POST);
 
 char* getTopic(POST);
+
+void setAuthor(POST, char[]);
+
+void setTopic(POST, char[]);

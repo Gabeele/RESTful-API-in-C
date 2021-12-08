@@ -30,6 +30,9 @@
     <ClCompile Include="Posting.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RestServices.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Posting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RestServices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,6 +23,12 @@ void saveListToFile(p_LISTOFPOSTINGS);
 
 LISTOFPOSTINGS readListFromFile();
 
+int keyIsvalid(p_LISTOFPOSTINGS, int);
+
+void stringDeformat(char[]);
+
+void stringFormat(char[]);
+
 
 
 

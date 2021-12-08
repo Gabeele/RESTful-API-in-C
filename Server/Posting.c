@@ -28,3 +28,13 @@ char* getTopic(POST post) {
 
 	return post.topic;
 }
+
+void setAuthor(POST post, char author[]) {
+	strcpy(post.author, author);
+
+}
+
+void setTopic(POST post, char topic[]) {
+	strcpy(post.topic, topic);
+
+}

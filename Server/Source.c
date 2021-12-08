@@ -6,35 +6,48 @@
 ///v1.0 - December 1st, 2021: Inital project
 
 
+#include "RestServices.h"
 
-#include "PostingList.h"
-#include "Server.h"
 
 int main(void) {
-
-	LISTOFPOSTINGS list = readListFromFile();
-
-	//LISTOFPOSTINGS list = initalizeListOfPosts();
+	
+	
 
 	InitlaizeWindowsSockets();
 
 	struct addrinfo* server_address = ConfigureLocalAddress();
 
-	SOCKET server_socket = CreateListeningSocket(server_address);
+	SOCKET listening_socket = CreateListeningSocket(server_address);
 
-	ConnectionListen(server_socket);
+	ConnectionListen(listening_socket);
 
-	//SOCKET client_socket = WaitAndConnect(server_socket);	
+	SOCKET client_socket = WaitAndConnect(listening_socket);
 
-	char message[STRING_BUFFER];
+	//char message[STRING_BUFFER];
 
-	//ReceiveMessageAndRespondFromSocket(message, client_socket);
+	CloseSocketConnection(listening_socket);
 
-	addToList(&list, "Gavin", "Plants");
-	addToList(&list, "Baxter", "Korea");
-	
+	LISTOFPOSTINGS list = readListFromFile();
+
+	char request[2048];
+	memset(request, '\0', 2048);
+
+	while (1) {
+
+
+		int bytes_received = ReceiveMessage(request, client_socket);
+		if (bytes_received < 1) {
+			break;
+		}
+
+		parsePayloadAndAction(&list, client_socket, request);
+
+	}
+
+	CloseSocketConnection(client_socket);
+
 	saveListToFile(&list);
-	//CloseSocketConnection(client_socket);
+
 	WindowsSocketsCleanUp();
 	return 0;
 }

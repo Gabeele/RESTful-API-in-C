@@ -98,29 +98,21 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 }
 
-void ReceiveMessageAndRespondFromSocket(char message[], SOCKET target_socket) {
+int  ReceiveMessage(char message[], SOCKET target_socket) {
 
 	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
 	printf("%.*s\n", bytes_received, message);
 
-	const char* response =
-		"HTTP/1.1 200 OK\r\n"
-		"Connection: close\r\n"
-		"Content-Type: text/plain\r\n\r\n"
-		"PLACEHOLDER FOR RESPONSE";
-
-	char data_message[STRING_BUFFER] = "Got it";
-
-	char buffer[STRING_BUFFER];
-
-	sprintf(buffer, "%s %s\n\0\0", response, data_message);
-
-	int bytes_sent = send(target_socket, buffer, strlen(buffer), 0);
-
-	printf("Response: %.*s\n", bytes_received, buffer);
-
+	return bytes_received;
 }
+
+void RespondToClient(char message[], SOCKET target_socket) {
+
+	int bytes_sent = send(target_socket, message, strlen(message), 0);
+
+	
+ }
 
 void CloseSocketConnection(SOCKET socket) {
 

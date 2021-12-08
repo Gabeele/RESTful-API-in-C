@@ -60,7 +60,24 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 
 void SendMessageToSocket(char message[], SOCKET target_socket) {
 
-	if (send(target_socket, message, strlen(message), 0) == 0) {
+	char buffer[2048], path[STRING_BUFFER];
+
+	sprintf(buffer, "GET /%s HTTP/1.1\r\n", "posts");
+	sprintf(buffer + strlen(buffer), "Host: %s:%s\r\n", "127.0.0.1", "8080");
+	sprintf(buffer + strlen(buffer), "Connection: close\r\n");
+	sprintf(buffer + strlen(buffer), "User-Agent: client.exe 1.0\r\n");
+	sprintf(buffer + strlen(buffer), "\r\n");
+
+	/*char buffer[2048], path[STRING_BUFFER];
+
+	sprintf(buffer, "POST /%s HTTP/1.1\r\n", "posts");
+	sprintf(buffer + strlen(buffer), "Host: %s:%s\r\n", "127.0.0.1", "8080");
+	sprintf(buffer + strlen(buffer), "Connection: close\r\n");
+	sprintf(buffer + strlen(buffer), "User-Agent: honpwc web_get 1.0\r\n");
+	sprintf(buffer + strlen(buffer), "\r\n\r\n");
+	sprintf(buffer + strlen(buffer), "author=Peter+Piper&topic=On+Fire\r\n");*/
+
+	if (send(target_socket, buffer, strlen(buffer), 0) == 0) {
 		printf("Error: Send failed on client side\n");
 		exit(1);
 	}
@@ -69,10 +86,10 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
-	while (recv(target_socket, message, STRING_BUFFER, 0) != 0)
-		;
+	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
-	printf("%s", message);
+
+	printf("%.*s", bytes_received, message);
 
 }
 

@@ -2,11 +2,6 @@
 
 LISTOFPOSTINGS initalizeListOfPosts() {
 
-	//p_ListOfPostings list = (p_ListOfPostings)malloc(sizeof(p_ListOfPostings));
-	//if (list == NULL) {
-	//	exit(1);
-	//}
-
 	LISTOFPOSTINGS list;
 
 	list.head = NULL;
@@ -79,7 +74,7 @@ int getLength(p_LISTOFPOSTINGS list) {
 	int counter = 0;
 	p_POSTNODE currentNode = list->head;
 
-	while (currentNode->next_node != NULL) {
+	while (currentNode != NULL) {
 		counter++;
 		currentNode = currentNode->next_node;
 	}
@@ -109,6 +104,9 @@ p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
+	char tempAuthor[STRING_MAX], tempTopic[STRING_MAX];
+	int tempPosting;
+
 	fopen_s(&filePointer, "PostingList.txt", "w+");
 
 	if (filePointer == NULL) {
@@ -122,7 +120,14 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 
 	do{
 	
-		fprintf(filePointer, "%d %s %s\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
+		tempPosting = getPostingID(node->data);	//Set the temps to allow spaces in loading and saving
+		strcpy(tempAuthor, getAuthor(node->data));
+		strcpy(tempTopic, getTopic(node->data));
+
+		stringFormat(tempAuthor);
+		stringFormat(tempTopic);
+
+		fprintf(filePointer, "%d %s %s\n", tempPosting, tempAuthor, tempTopic);
 		
 		node = node->next_node;
 
@@ -134,8 +139,8 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 LISTOFPOSTINGS readListFromFile() {
 
 	int tempID = 0;
-	char tempAuthor[STRING_MAX] = "";
-	char tempTopic[STRING_MAX] = "";
+	char tempAuthor[STRING_MAX];
+	char tempTopic[STRING_MAX];
 	char buf[STRING_MAX];
 
 	LISTOFPOSTINGS list = initalizeListOfPosts();
@@ -151,9 +156,9 @@ LISTOFPOSTINGS readListFromFile() {
 	fscanf_s(filePointer, "%d\n", &list.maxID);
 
 	while (fscanf(filePointer, "%d %s %s\n", &tempID, tempAuthor, tempTopic) != EOF) {
-		//fscanf(filePointer, "%d %s %s\n", &tempID, tempAuthor, tempTopic);
 
-		// &tempID, tempAuthor, tempTopic
+		stringDeformat(tempAuthor);
+		stringDeformat(tempTopic);
 
 		POST post = createPost(tempID, tempAuthor, tempTopic);
 		p_POSTNODE node = createNode(post);
@@ -178,3 +183,56 @@ LISTOFPOSTINGS readListFromFile() {
 	return list;
 }
 
+int keyIsvalid(p_LISTOFPOSTINGS list, int key) {
+	int validFlag = 0;	//0 = false, flag to ensure it is true
+
+	p_POSTNODE node = list->head;
+
+	for (int i = 0; i < getLength(list); i++) {
+		
+		if (node == NULL && !validFlag) {
+			return 0;
+		}
+		else if (key == getPostingID(node->data)) {
+			return 1;
+		}
+
+		node = node->next_node;
+	}
+
+	return 0;
+}
+
+//Helper functions 
+
+/// <summary>
+/// Formats string; swap '+' for ' '
+/// </summary>
+/// <param name="string">A string that include '+'</param>
+void stringDeformat(char string[]) {
+
+	int i = 0;
+	while (i < strlen(string)) {
+		if (string[i] == '+') {
+			string[i] = ' ';
+		}
+
+		i++;
+	}
+}
+
+/// <summary>
+///Formats string; swap ' ' for '+'
+/// </summary>
+/// <param name="string">String in need of formating </param>
+void stringFormat(char string[]) {
+
+	int i = 0;
+	while (i < strlen(string)) {
+		if (string[i] == ' ') {
+			string[i] = '+';
+		}
+
+		i++;
+	}
+}
