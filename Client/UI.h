@@ -9,6 +9,8 @@
 
 int menu(SOCKET);
 
+void pressToContinute();
+
 void printMenu();
 
 //void printConnection();

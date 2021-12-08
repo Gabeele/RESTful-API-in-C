@@ -33,6 +33,8 @@ void main() {
 	
 		int bytes_recieved = ReceiveMessageFromSocket(response, target_socket);
 
+		pressToContinute();
+
 		if (bytes_recieved == 0) {
 			printf("Server connection closed.");
 			break;

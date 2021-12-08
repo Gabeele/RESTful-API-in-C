@@ -10,6 +10,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 	char* body;
 	
 	//Payload data
+	char keystr[STRING_BUFFER];
 	int key;
 	char  author[STRING_BUFFER];
 	char topic[STRING_BUFFER];
@@ -65,19 +66,43 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 
 		if (strstr(path, "/posts/")) {
 			
-			sscanf(path, "/posts/%d", &key);
+			sscanf(path, "/posts/%s", keystr);
+
+			stringDeformat(keystr);
 			
-			if (get(list, key, data) == 1) {
-				getResponseHeader(OK, response);
-				sprintf(response + strlen(response), "%s", data);
-				RespondToClient(response, client_socket);
-				return;
+			if (sscanf(keystr, "%d", &key)== 1) {	//Checks if the keystr is a number
+
+				key = atoi(keystr);
+
+				if (get(list, key, data) == 1) {	//Get with ID
+					getResponseHeader(OK, response);
+					sprintf(response + strlen(response), "%s", data);
+					RespondToClient(response, client_socket);
+					return;
+				}
+			
+				else {
+					getResponseHeader(Not_Found, response);
+					RespondToClient(response, client_socket);
+					return;
+				}
 			}
 			else {
-				getResponseHeader(Not_Found, response);
-				RespondToClient(response, client_socket);
-				return;
+				if (getFilter(list, keystr, data) == 1) {	//Get with ID
+					getResponseHeader(OK, response);
+					sprintf(response + strlen(response), "%s", data);
+					RespondToClient(response, client_socket);
+					return;
+				}
+
+				else {
+					getResponseHeader(Not_Found, response);
+					RespondToClient(response, client_socket);
+					return;
+				}
+
 			}
+			
 		}
 		else {
 			if (getAll(list, data) == 1) {
@@ -157,6 +182,41 @@ int get(p_LISTOFPOSTINGS list, int key, char data[]) {
 	return 1;
 }
 
+int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
+{
+	int isFoundFlag = 0; //
+
+	p_POSTNODE node = list->head;
+
+	sprintf(data, "{\n");
+
+	for (int i = 0; i < getLength(list); i++) {
+
+		if (node == NULL) {
+			break;
+		}
+		else if ((strstr(getAuthor(node->data), keyword) || (strstr(getTopic(node->data), keyword)))) {
+			
+			sprintf(data + strlen(data), "\t{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
+
+			isFoundFlag = 1; 
+
+		}
+
+		node = node->next_node;
+	}
+
+	sprintf(data + strlen(data), "}\n");
+
+	if (isFoundFlag) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+
+}
+
 int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
 	
 	if (!keyIsvalid(list, key)) {
@@ -168,9 +228,9 @@ int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
 		return 0;        
 	}
 
-	setAuthor(node->data, author);
+	setAuthor(&node->data, author);
 
-	setTopic(node->data, topic);
+	setTopic(&node->data, topic);
 
 	return 1;
 }

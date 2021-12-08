@@ -15,7 +15,7 @@
 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
-#define STRING_BUFFER 250
+#define STRING_BUFFER 2048
 #define MAXLISTENERS 10
 
 typedef enum connection_type

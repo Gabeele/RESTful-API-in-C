@@ -1,6 +1,7 @@
 #include "Server.h"
 #include "PostingList.h"
 
+#include <ctype.h>
 #include <string.h>
 
 enum response_codes
@@ -15,6 +16,8 @@ int post(p_LISTOFPOSTINGS list, char[], char[]); //Create
 int getAll(p_LISTOFPOSTINGS, char[]);	//Get collection
 
 int get(p_LISTOFPOSTINGS, int, char[]);	//Get post
+
+int getFilter(p_LISTOFPOSTINGS, char[], char[]);
 
 int put(p_LISTOFPOSTINGS, int, char[], char[]);	//Update
 

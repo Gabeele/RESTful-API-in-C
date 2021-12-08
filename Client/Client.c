@@ -122,6 +122,18 @@ void buildGETCollectionRequest(char request[]) {
 
 }
 
+void buildGETFilterRequest(char request[], char keyword[])
+{
+	stringFormat(keyword);
+
+	sprintf(request, "GET /posts/%s HTTP/1.1\r\n", keyword);
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+
+}
+
 void buildPUTRequest(char request[], char author[], char topic[], int key) {
 
 	stringFormat(author);

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_MAX 250
+#define STRING_MAX 2048
 
 typedef struct post {
 	int postingID;
@@ -23,6 +23,6 @@ char* getAuthor(POST);
 
 char* getTopic(POST);
 
-void setAuthor(POST, char[]);
+void setAuthor(p_POST, char[]);
 
-void setTopic(POST, char[]);
+void setTopic(p_POST, char[]);

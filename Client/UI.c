@@ -48,7 +48,7 @@ int menu(SOCKET target_socket) {
 		case '3':	//GET
 			clearInputSteam();
 
-			printf("\Key:  ");
+			printf("\nKey:  ");
 			fgets(keystr, INPUT_BUFFER, stdin);
 
 			key = atoi(keystr);
@@ -56,17 +56,49 @@ int menu(SOCKET target_socket) {
 			buildGETRequest(request, key);
 			SendMessageToSocket(request, target_socket);
 			break;
-		case '4':
-			//Get Collection
+		case '4':	//GET Collection
+			clearInputSteam();
+
+			buildGETCollectionRequest(request);
+			SendMessageToSocket(request, target_socket);
 			break;
-		case '5':
-			//Put
+		case '5': //Put
+			clearInputSteam();
+
+			printf("\Key:  ");
+			fgets(keystr, INPUT_BUFFER, stdin);
+			key = atoi(keystr);
+
+			printf("\nAuthor:  ");
+			fgets(author, INPUT_BUFFER, stdin);
+
+
+			printf("\nTopic: ");
+			fgets(topic, INPUT_BUFFER, stdin);
+
+			buildPUTRequest(request, author, topic, key);
+			SendMessageToSocket(request, target_socket);
 			break;
 		case '6':
-			//Delete
+			clearInputSteam();
+
+			printf("\Keyword:  ");
+			fgets(keystr, INPUT_BUFFER, stdin);
+
+			buildGETFilterRequest(request, keystr);
+			SendMessageToSocket(request, target_socket);
+
 			break;
 		case '7':
-			//Get Filtering
+			clearInputSteam();
+
+			printf("\nKey:  ");
+			fgets(keystr, INPUT_BUFFER, stdin);
+
+			key = atoi(keystr);
+
+			buildDELETERequest(request, key);
+			SendMessageToSocket(request, target_socket);
 			break;
 		case 'x':
 
@@ -82,13 +114,19 @@ int menu(SOCKET target_socket) {
 		return 0;
 }
 
+void pressToContinute() {
+
+	printf("Press any key to continute...");
+
+	getchar();
+}
 
 
 void printMenu() {
 
 	printf("Client-Server RESTful API Example");
 
-	printf("\n\t[1] Single Post\n\t[2] Collection Post\n\t[3] Get Single\n\t[4] Get Collection\n\t[5] Put\n\t[6] Post\n\t[7] Delete\n\n\t[x] Exit");
+	printf("\n\t[1] View Connection Info\n\t[2] Create a Post\n\t[3] Get a Post by Key\n\t[4] Get Collection of Posts\n\t[5] Update a Post\n\t[6] Get a Posts by Filter\n\t[7] Delete a Post by Key\n\t------------------\n\t[x] Exit and Disconnect");
 
 	//		 "\n[8] Get filtering
 }

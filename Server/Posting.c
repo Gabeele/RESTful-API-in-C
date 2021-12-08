@@ -29,12 +29,12 @@ char* getTopic(POST post) {
 	return post.topic;
 }
 
-void setAuthor(POST post, char author[]) {
-	strcpy(post.author, author);
+void setAuthor(p_POST post, char author[]) {
+	strcpy(post->author, author);
 
 }
 
-void setTopic(POST post, char topic[]) {
-	strcpy(post.topic, topic);
+void setTopic(p_POST post, char topic[]) {
+	strcpy(post->topic, topic);
 
 }

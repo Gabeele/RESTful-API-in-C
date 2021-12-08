@@ -23,7 +23,7 @@
 //Defines 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
-#define STRING_BUFFER 250
+#define STRING_BUFFER 2048
 #define IP_ADDRESS "127.0.0.1"
 #define PORT_NUMBER "8080"
 
@@ -53,6 +53,8 @@ void buildPOSTRequest(char[], char[], char[]);
 void buildGETRequest(char[], int);
 
 void buildGETCollectionRequest(char[]);
+
+void buildGETFilterRequest(char[], char[]);
 
 void buildPUTRequest(char[], char[], char[], int);
 

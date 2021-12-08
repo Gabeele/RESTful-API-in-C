@@ -100,7 +100,6 @@ p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 
 }
 
-
 void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
@@ -135,6 +134,9 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 
 	fclose(filePointer);
 }
+
+
+
 
 LISTOFPOSTINGS readListFromFile() {
 

@@ -29,14 +29,15 @@ int main(void) {
 
 	LISTOFPOSTINGS list = readListFromFile();
 
-	char request[2048];
-	memset(request, '\0', 2048);
 
 	while (1) {
 
+	char request[2048];
+	memset(request, '\0', 2048);
 
 		int bytes_received = ReceiveMessage(request, client_socket);
 		if (bytes_received < 1) {
+			printf("Client connection closed.");
 			break;
 		}
 

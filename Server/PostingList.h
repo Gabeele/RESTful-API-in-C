@@ -19,6 +19,8 @@ int getLength(p_LISTOFPOSTINGS);
 
 p_POSTNODE searchForNode(p_LISTOFPOSTINGS, int);
 
+p_POSTNODE searchByKeyword(p_LISTOFPOSTINGS, char[]);
+
 void saveListToFile(p_LISTOFPOSTINGS);
 
 LISTOFPOSTINGS readListFromFile();
