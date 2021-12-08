@@ -7,6 +7,8 @@
 
 #include "UI.h"
 
+#define ZERO_BYTE_MESSAGE ""
+
 
 void main() {
 
@@ -18,27 +20,28 @@ void main() {
 
 	
 
-	char message[STRING_BUFFER];
-
 	//send a post message
-	char input = getchar();
 
-	while (input != 'axit') {
+	while (1) {
+		char response[STRING_BUFFER];
+		memset(response, '\0', STRING_BUFFER);
 
-		menu();
+		if (menu(target_socket) == 1) {
+			SendMessageToSocket(ZERO_BYTE_MESSAGE, target_socket);
+			break;
+		}
+	
+		int bytes_recieved = ReceiveMessageFromSocket(response, target_socket);
 
-		
+		if (bytes_recieved == 0) {
+			printf("Server connection closed.");
+			break;
+		}
 
-		SendMessageToSocket(message, target_socket);
-		char buf[STRING_BUFFER];
-
-		memset(buf, '\0', STRING_BUFFER);
-		ReceiveMessageFromSocket(buf, target_socket);
-
-		
 
 	}
 
+	shutdown(target_socket, SD_SEND);
 	CloseSocketConnection(target_socket);
 	WindowsSocketsCleanUp();
 	return 0;

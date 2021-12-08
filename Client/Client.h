@@ -24,8 +24,14 @@
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
 #define STRING_BUFFER 250
+#define IP_ADDRESS "127.0.0.1"
+#define PORT_NUMBER "8080"
 
 
+enum rest_methods
+{
+	POST_post = 2, GET_post, Get_all, PUT_post, DELETE_post, GET_filter
+};
 
 
 void InitlaizeWindowsSockets();
@@ -36,10 +42,24 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo*);
 
 void SendMessageToSocket(char[], SOCKET);
 
-void ReceiveMessageFromSocket(char[], SOCKET);
+int ReceiveMessageFromSocket(char[], SOCKET);
 
 void CloseSocketConnection(SOCKET);
 
 void WindowsSocketsCleanUp();
 
+void buildPOSTRequest(char[], char[], char[]);
+
+void buildGETRequest(char[], int);
+
+void buildGETCollectionRequest(char[]);
+
+void buildPUTRequest(char[], char[], char[], int);
+
+void buildDELETERequest(char[], int);
+
 void printTargetAddress(struct addrinfo*);
+
+void stringFormat(char[]);
+
+void stringDeformat(char[]);

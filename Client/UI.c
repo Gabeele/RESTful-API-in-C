@@ -1,10 +1,19 @@
 #include "UI.h"
 
-void menu() {
-	int isRunning = 1; //boolean to exit the loop
+int menu(SOCKET target_socket) {
+	int isRunning = 0; //boolean to exit the loop
 	char option;
 
-	while (isRunning == 1) {
+	do {
+		
+		isRunning = 0;
+
+		char request[STRING_BUFFER];
+		char author[INPUT_BUFFER];
+		char topic[INPUT_BUFFER];
+		char keystr[INPUT_BUFFER];
+		int key;
+
 		system("cls");
 
 		fflush(stdin);
@@ -14,15 +23,38 @@ void menu() {
 		printf("\nSelect menu option: ");
 
 		option = getchar();
+
+
 		switch (option) {
 		case '1':
-			//Single post
+			//display connection info info
 			break;
-		case '2':
-			//Collection post
+		case '2':	//POST
+			clearInputSteam();
+
+			printf("\nAuthor:  ");
+			fgets(author, INPUT_BUFFER, stdin);
+
+
+			printf("\nTopic: ");
+			fgets(topic, INPUT_BUFFER, stdin);
+
+
+			buildPOSTRequest(request, author, topic);
+			SendMessageToSocket(request, target_socket);
+
 			break;
-		case '3':
-			//Get
+
+		case '3':	//GET
+			clearInputSteam();
+
+			printf("\Key:  ");
+			fgets(keystr, INPUT_BUFFER, stdin);
+
+			key = atoi(keystr);
+
+			buildGETRequest(request, key);
+			SendMessageToSocket(request, target_socket);
 			break;
 		case '4':
 			//Get Collection
@@ -31,25 +63,26 @@ void menu() {
 			//Put
 			break;
 		case '6':
-			//Post
-			break;
-		case '7':
 			//Delete
 			break;
-		case '8':
+		case '7':
 			//Get Filtering
 			break;
 		case 'x':
-			return;
+
+			return 1;
 			break;
 		default:
+			isRunning = 1;
 			break;
 		}
 
-	}
+	} while (isRunning);
 
-	
+		return 0;
 }
+
+
 
 void printMenu() {
 
@@ -58,4 +91,17 @@ void printMenu() {
 	printf("\n\t[1] Single Post\n\t[2] Collection Post\n\t[3] Get Single\n\t[4] Get Collection\n\t[5] Put\n\t[6] Post\n\t[7] Delete\n\n\t[x] Exit");
 
 	//		 "\n[8] Get filtering
+}
+
+/// <summary>
+/// Clears the input stream of stdin of unwanted characters such as \n or \0
+/// </summary>
+void clearInputSteam() {
+	char inputStreamCharacter;
+
+	 do {
+		inputStreamCharacter = getchar();
+
+	 } while (inputStreamCharacter != '\n' && inputStreamCharacter != '\0');
+
 }

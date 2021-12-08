@@ -5,8 +5,12 @@
 
 #include "Client.h"
 
-void menu();
+#define INPUT_BUFFER 100
+
+int menu(SOCKET);
 
 void printMenu();
 
 //void printConnection();
+
+void clearInputSteam();

@@ -60,37 +60,21 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 
 void SendMessageToSocket(char message[], SOCKET target_socket) {
 
-	char buffer[2048], path[STRING_BUFFER];
-
-	sprintf(buffer, "GET /%s HTTP/1.1\r\n", "posts");
-	sprintf(buffer + strlen(buffer), "Host: %s:%s\r\n", "127.0.0.1", "8080");
-	sprintf(buffer + strlen(buffer), "Connection: close\r\n");
-	sprintf(buffer + strlen(buffer), "User-Agent: client.exe 1.0\r\n");
-	sprintf(buffer + strlen(buffer), "\r\n");
-
-	/*char buffer[2048], path[STRING_BUFFER];
-
-	sprintf(buffer, "POST /%s HTTP/1.1\r\n", "posts");
-	sprintf(buffer + strlen(buffer), "Host: %s:%s\r\n", "127.0.0.1", "8080");
-	sprintf(buffer + strlen(buffer), "Connection: close\r\n");
-	sprintf(buffer + strlen(buffer), "User-Agent: honpwc web_get 1.0\r\n");
-	sprintf(buffer + strlen(buffer), "\r\n\r\n");
-	sprintf(buffer + strlen(buffer), "author=Peter+Piper&topic=On+Fire\r\n");*/
-
-	if (send(target_socket, buffer, strlen(buffer), 0) == 0) {
+	if (send(target_socket, message, strlen(message), 0) == 0) {
 		printf("Error: Send failed on client side\n");
 		exit(1);
 	}
 
 }
 
-void ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
+int ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
 	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
 
 	printf("%.*s", bytes_received, message);
-
+	
+	return bytes_received;
 }
 
 void CloseSocketConnection(SOCKET socket) {
@@ -104,6 +88,64 @@ void WindowsSocketsCleanUp() {
 	WSACleanup();
 }
 
+void buildPOSTRequest(char request[], char author[], char topic[]) {
+
+	stringFormat(author);
+	stringFormat(topic);
+
+	sprintf(request, "POST /posts HTTP/1.1\r\n");
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
+
+}
+
+void buildGETRequest(char request[], int key) {
+
+	sprintf(request, "GET /posts/%d HTTP/1.1\r\n", key);
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+
+}
+
+void buildGETCollectionRequest(char request[]) {
+
+	sprintf(request, "GET /posts HTTP/1.1\r\n");
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+
+}
+
+void buildPUTRequest(char request[], char author[], char topic[], int key) {
+
+	stringFormat(author);
+	stringFormat(topic);
+
+	sprintf(request, "PUT /posts/%d HTTP/1.1\r\n", key);
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
+
+}
+
+void buildDELETERequest(char request[], int key ) {
+
+	sprintf(request, "DELETE /posts/%d HTTP/1.1\r\n", key);
+	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
+	sprintf(request + strlen(request), "Connection: close\r\n");
+	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
+	sprintf(request + strlen(request), "\r\n\r\n");
+
+}
+
 
 //Printing Functions
 
@@ -114,7 +156,43 @@ void printTargetAddress(struct addrinfo* address) {
 
 	getnameinfo(address->ai_addr, address->ai_addrlen, address_buff, sizeof(address_buff), service_buff, sizeof(service_buff), NI_NUMERICHOST);	//Sets the address and service information to a string
 
-	printf("Target address is: %s\t%s\n", address_buff, service_buff);
+	printf("Server address is: %s\t%s\n", address_buff, service_buff);
+}
+
+
+/// <summary>
+/// Formats string; swap '+' for ' '
+/// </summary>
+/// <param name="string">A string that include '+'</param>
+void stringDeformat(char string[]) {
+
+	int i = 0;
+	while (i < strlen(string)) {
+		if (string[i] == '+') {
+			string[i] = ' ';
+		}
+
+		i++;
+	}
+}
+
+/// <summary>
+///Formats string; swap ' ' for '+'
+/// </summary>
+/// <param name="string">String in need of formating </param>
+void stringFormat(char string[]) {
+
+	int i = 0;
+	while (i < strlen(string)) {
+		if (string[i] == ' ') {
+			string[i] = '+';
+		}
+		else if (string[i] == '\n') {
+			string[strlen(string) - 1] = 0;	//Removes a new line character at the end of the string
+		}
+
+		i++;
+	}
 }
 
 
