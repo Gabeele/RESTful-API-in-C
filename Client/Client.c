@@ -4,9 +4,14 @@
 ///Gavin Abeele - gabeele2160@conestogac.on.ca
 /// 
 ///v1.0 - December 1st, 2021: Inital project
+/// 
+///Client C File on Client - Functions for creating the network connection, building requests and displaying responses.
 
 #include "Client.h"
 
+/// <summary>
+/// Inializes winsock on the system
+/// </summary>
 void InitlaizeWindowsSockets() {
 
 	WSADATA data;
@@ -18,6 +23,9 @@ void InitlaizeWindowsSockets() {
 
 }
 
+/// <summary>
+/// Creates a addrinfo of a TCP connection.
+/// </summary>
 struct addrinfo* ConfigureTargetAddress(char ip[], char port[]) {
 	
 	ADDRINFO type_info;
@@ -32,12 +40,15 @@ struct addrinfo* ConfigureTargetAddress(char ip[], char port[]) {
 		 exit(1);
 	 }
 
-	 printTargetAddress(target_address);
-
 	 return target_address;
 
 }
 
+/// <summary>
+/// Creates a socket through a addrinfo stucture
+/// </summary>
+/// <param name="address">Addrinfo pointer</param>
+/// <returns></returns>
 SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 	SOCKET sock;
 
@@ -58,6 +69,11 @@ SOCKET CreateConnectionToTargetSocket(struct addrinfo* address) {
 	return sock;
 }
 
+/// <summary>
+/// Sends a message to a selected socket
+/// </summary>
+/// <param name="message">The messages which is to be sent</param>
+/// <param name="target_socket">The socket to send data to</param>
 void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 	if (send(target_socket, message, strlen(message), 0) == 0) {
@@ -67,27 +83,47 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 
 }
 
+/// <summary>
+/// Retrives a message from the targeted socket
+/// </summary>
+/// <param name="message">Blank string which will be recived</param>
+/// <param name="target_socket">The socket to listen on</param>
+/// <returns>Amount of bytes recieved</returns>
 int ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
-	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
+	printf("Raw Data Response:\n");
 
+	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
 	printf("%.*s", bytes_received, message);
 	
 	return bytes_received;
 }
 
+/// <summary>
+/// Closes the socket
+/// </summary>
+/// <param name="socket">Socket to close</param>
 void CloseSocketConnection(SOCKET socket) {
 
 	closesocket(socket);
 
 }
 
+/// <summary>
+/// Cleans up the windows sockets
+/// </summary>
 void WindowsSocketsCleanUp() {
 
 	WSACleanup();
 }
 
+/// <summary>
+/// Creates a post request
+/// </summary>
+/// <param name="request">Empty string where the reqest can eb appended</param>
+/// <param name="author">Authors Name</param>
+/// <param name="topic">Topic</param>
 void buildPOSTRequest(char request[], char author[], char topic[]) {
 
 	stringFormat(author);
@@ -95,23 +131,30 @@ void buildPOSTRequest(char request[], char author[], char topic[]) {
 
 	sprintf(request, "POST /posts HTTP/1.1\r\n");
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
-	sprintf(request + strlen(request), "Connection: close\r\n");
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
 	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
 
 }
 
+/// <summary>
+/// Create a get request
+/// </summary>
+/// <param name="request">Empty string where the request can be appended</param>
+/// <param name="key">Posting ID for which posting to retrieve</param>
 void buildGETRequest(char request[], int key) {
 
 	sprintf(request, "GET /posts/%d HTTP/1.1\r\n", key);
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
-	sprintf(request + strlen(request), "Connection: close\r\n");
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
 
 }
 
+/// <summary>
+/// Creates a get request
+/// </summary>
+/// <param name="request">Empty string where the request can be appended</param>
 void buildGETCollectionRequest(char request[]) {
 
 	sprintf(request, "GET /posts HTTP/1.1\r\n");
@@ -122,18 +165,29 @@ void buildGETCollectionRequest(char request[]) {
 
 }
 
+/// <summary>
+/// Creates a GET request 
+/// </summary>
+/// <param name="request">Empty string where the request can be appended</param>
+/// <param name="key">Keyword for which posting to be obtained</param>
 void buildGETFilterRequest(char request[], char keyword[])
 {
 	stringFormat(keyword);
 
 	sprintf(request, "GET /posts/%s HTTP/1.1\r\n", keyword);
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
-	sprintf(request + strlen(request), "Connection: close\r\n");
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
 
 }
 
+/// <summary>
+/// Creates an update request
+/// </summary>
+/// <param name="request">Empty string where the request can be appended</param>
+/// <param name="author">A string of the updated authors name</param>
+/// <param name="topic">A string of the updated topic</param>
+/// <param name="key">Posting ID for which posting to be updated</param>
 void buildPUTRequest(char request[], char author[], char topic[], int key) {
 
 	stringFormat(author);
@@ -141,26 +195,30 @@ void buildPUTRequest(char request[], char author[], char topic[], int key) {
 
 	sprintf(request, "PUT /posts/%d HTTP/1.1\r\n", key);
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
-	sprintf(request + strlen(request), "Connection: close\r\n");
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
 	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
 
 }
 
+/// <summary>
+/// Creates a delete request	
+/// </summary>
+/// <param name="request">Empty string where the request can be appended</param>
+/// <param name="key">Posting ID for which posting to be deleted</param>
 void buildDELETERequest(char request[], int key ) {
 
 	sprintf(request, "DELETE /posts/%d HTTP/1.1\r\n", key);
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
-	sprintf(request + strlen(request), "Connection: close\r\n");
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
 
 }
 
-
-//Printing Functions
-
+/// <summary>
+/// Prints the address infomration 
+/// </summary>
+/// <param name="address">addrinfo pointer to an address</param>
 void printTargetAddress(struct addrinfo* address) {
 
 	char address_buff[STRING_BUFFER];
@@ -170,7 +228,6 @@ void printTargetAddress(struct addrinfo* address) {
 
 	printf("Server address is: %s\t%s\n", address_buff, service_buff);
 }
-
 
 /// <summary>
 /// Formats string; swap '+' for ' '
