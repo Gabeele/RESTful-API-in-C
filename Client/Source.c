@@ -13,13 +13,13 @@
 
 void main() {
 
-	printf("Initalize Socket\n");
+	printf("Initalize Windows socket...\n\n");
 	InitlaizeWindowsSockets();
 
-	printf("Creating target address...\n");
+	printf("Creating target address...\n\n");
 	struct addrinfo* target_address = ConfigureTargetAddress(IP_ADDRESS, PORT_NUMBER);
 
-	printf("Creating target socket...\n");
+	printf("Creating target socket...\n\n");
 	SOCKET target_socket = CreateConnectionToTargetSocket(target_address);
 
 	while (1) {
@@ -42,10 +42,10 @@ void main() {
 
 	}
 
-	printf("Closing target socket...\n");
+	printf("Closing target socket...\n\n");
 	CloseSocketConnection(target_socket);
 
-	printf("Socket cleanup ...\n");
+	printf("Socket cleanup ...\n\n");
 	WindowsSocketsCleanUp();
 
 	return 0;

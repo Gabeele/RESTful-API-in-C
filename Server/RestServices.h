@@ -1,9 +1,21 @@
+///CSCN72020 - Computer Networks Assignment 3 
+///RESTful API in C
+///
+///Gavin Abeele - gabeele2160@conestogac.on.ca
+/// 
+///v1.0 - December 1st, 2021: Inital project
+/// 
+/// RestServices header File on Server - Declaring variables, defines, and protoyping 
+
 #include "Server.h"
 #include "PostingList.h"
 
 #include <ctype.h>
 #include <string.h>
 
+/// <summary>
+/// Enumeration for the response codes
+/// </summary>
 enum response_codes
 {
 	OK = 200, Created = 201, Bad_Request = 400, Not_Found = 404

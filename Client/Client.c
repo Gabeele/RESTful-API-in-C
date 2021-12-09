@@ -92,6 +92,7 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 int ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
 	printf("Raw Data Response:\n");
+	printf("----------------------------------------------------------------------\n\n");
 
 	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 

@@ -1,7 +1,20 @@
+///CSCN72020 - Computer Networks Assignment 3 
+///RESTful API in C
+///
+///Gavin Abeele - gabeele2160@conestogac.on.ca
+/// 
+///v1.0 - December 1st, 2021: Inital project
+/// 
+/// RestServices File on Server - Functions pertaining to REST actions, building responses, managing server data, and directing program flow
 
 #include "RestServices.h"
 
-
+/// <summary>
+/// Parses the request, organizes the request, builds response and sends responses to client
+/// </summary>
+/// <param name="list">The list of postings</param>
+/// <param name="client_socket">Client socket or intended recipiant</param>
+/// <param name="payload">The request or message</param>
 void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char payload[]) {
 
 	//Payload Information
@@ -19,20 +32,19 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 	char data[STRING_BUFFER];	
 	char response[STRING_BUFFER];
 
-	if (sscanf(payload, "%s %s HTTP/1.1\r\n", method, path) == EOF) {
-		
+	if (sscanf(payload, "%s %s HTTP/1.1\r\n", method, path) == EOF) {	//Obtains the method and path
 		getResponseHeader(Not_Found, response);
 		RespondToClient(response, client_socket);
 		return;
 	}
 
-	body = strstr(payload, "\r\n\r\n");
+	body = strstr(payload, "\r\n\r\n");	//Obtains the body of the payload
 
 	if (strcmp(method, "POST") == 0) {	//When the method is POST the system will add a new post to the linked list
 		
-		splitBody(body, author, topic);
+		splitBody(body, author, topic);	
 
-		if (post(list, author, topic) == 1) {
+		if (post(list, author, topic) == 1) {	
 			getResponseHeader(Created, response);
 			RespondToClient(response, client_socket);
 			return;
@@ -48,7 +60,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 		
 		splitBody(body, author, topic);
 
-		sscanf(path, "/posts/%d", &key);
+		sscanf(path, "/posts/%d", &key);	//Obtains the path postingID
 
 		if (put(list, key, author, topic) == 1) {
 			getResponseHeader(OK, response);
@@ -62,13 +74,13 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 		}
 
 	}
-	else if (strcmp(method, "GET") == 0) {
+	else if (strcmp(method, "GET") == 0) {	//When the method is GET it will obtain the proper data determined through the path
 
 		if (strstr(path, "/posts/")) {
 			
-			sscanf(path, "/posts/%s", keystr);
+			sscanf(path, "/posts/%s", keystr);	//Obtains the keyword
 
-			stringDeformat(keystr);
+			stringDeformat(keystr);	
 			
 			if (sscanf(keystr, "%d", &key)== 1) {	//Checks if the keystr is a number
 
@@ -87,8 +99,8 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 					return;
 				}
 			}
-			else {
-				if (getFilter(list, keystr, data) == 1) {	//Get with ID
+			else {	//If it is not a number 
+				if (getFilter(list, keystr, data) == 1) {	//Get with a filter keyword
 					getResponseHeader(OK, response);
 					sprintf(response + strlen(response), "%s", data);
 					RespondToClient(response, client_socket);
@@ -104,7 +116,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 			}
 			
 		}
-		else {
+		else {	//If it is nether ID or keyword then retrive all the data
 			if (getAll(list, data) == 1) {
 				getResponseHeader(OK, response);
 				sprintf(response + strlen(response), "%s", data);
@@ -120,7 +132,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 		}
 		
 	}
-	else if (strcmp(method, "DELETE") == 0) {
+	else if (strcmp(method, "DELETE") == 0) {	//When the method is DELETE it will remove the posting with the ID
 		sscanf(path, "/posts/%d", &key);
 
 		if (delete(list, key) == 1) {
@@ -133,13 +145,20 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 			RespondToClient(response, client_socket);
 		}
 	}
-	else {
+	else {	//If it is not any other the other methods, will respond with an error
 		getResponseHeader(Not_Found, response);
 		RespondToClient(response, client_socket);
 	}
 
 }
 
+/// <summary>
+/// Adds a posting to the list
+/// </summary>
+/// <param name="list">The list to add to</param>
+/// <param name="author">Authors name</param>
+/// <param name="topic">Topic of the subject</param>
+/// <returns>Boolean integer if successful<</returns>
 int post(p_LISTOFPOSTINGS list, char author[], char topic[]) {
 
 	addToList(list, author, topic);
@@ -147,6 +166,12 @@ int post(p_LISTOFPOSTINGS list, char author[], char topic[]) {
 	return 1;
 }
 
+/// <summary>
+/// Obtains all the postings information
+/// </summary>
+/// <param name="list">The list of postings</param>
+/// <param name="data">Empty string to append the data to</param>
+/// <returns>Boolean integer if successful<</returns>
 int getAll(p_LISTOFPOSTINGS list, char data[])
 {
 	p_POSTNODE node = list->head;
@@ -169,6 +194,13 @@ int getAll(p_LISTOFPOSTINGS list, char data[])
 	return 1;
 }
 
+/// <summary>
+/// Gets the data from a key
+/// </summary>
+/// <param name="list">List of postings</param>
+/// <param name="key">The PostID key</param>
+/// <param name="data">Empty string to append data to</param>
+/// <returns>Boolean integer if successful</returns>
 int get(p_LISTOFPOSTINGS list, int key, char data[]) {
 
 	if (keyIsvalid(list, key) == 0) {
@@ -182,6 +214,13 @@ int get(p_LISTOFPOSTINGS list, int key, char data[]) {
 	return 1;
 }
 
+/// <summary>
+/// Obtains the data from a list determined by a keyword
+/// </summary>
+/// <param name="list">The list of postings</param>
+/// <param name="keyword">The keyword to search by</param>
+/// <param name="data">Empty string to append data too</param>
+/// <returns>Boolean integer if successful</returns>
 int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
 {
 	int isFoundFlag = 0; //
@@ -217,6 +256,14 @@ int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
 
 }
 
+/// <summary>
+/// Updates a posting
+/// </summary>
+/// <param name="list">The list of postings</param>
+/// <param name="key">PostingID of what to update</param>
+/// <param name="author">New author</param>
+/// <param name="topic">New Topic</param>
+/// <returns>Boolean integer if successfu</returns>
 int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
 	
 	if (!keyIsvalid(list, key)) {
@@ -235,6 +282,12 @@ int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
 	return 1;
 }
 
+/// <summary>
+/// Deletes an item on the list by the key
+/// </summary>
+/// <param name="list">List of postings</param>
+/// <param name="key">The PostID key</param>
+/// <returns>Boolean integer if successful</returns>
 int delete(p_LISTOFPOSTINGS list, int key) {
 
 	if (!keyIsvalid(list, key)) {
@@ -251,7 +304,12 @@ int delete(p_LISTOFPOSTINGS list, int key) {
 	return 1;
 }
 
-
+/// <summary>
+/// Splits the body of a request into anthor and topic
+/// </summary>
+/// <param name="body">The body of the request</param>
+/// <param name="author">Empty author string</param>
+/// <param name="topic">Empty topic string</param>
 void splitBody(char body[], char author[], char topic[]) {
 
 	int i = 0;
@@ -273,6 +331,11 @@ void splitBody(char body[], char author[], char topic[]) {
 
 }
 
+/// <summary>
+/// Creates a header respones based on the code
+/// </summary>
+/// <param name="response_codes">Response code (Enumeration)</param>
+/// <param name="response">Empty string to append</param>
 void getResponseHeader(int response_codes, char response[]) {
 	
 	switch (response_codes)

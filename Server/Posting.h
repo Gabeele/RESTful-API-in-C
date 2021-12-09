@@ -1,3 +1,11 @@
+///CSCN72020 - Computer Networks Assignment 3 
+///RESTful API in C
+///
+///Gavin Abeele - gabeele2160@conestogac.on.ca
+/// 
+///v1.0 - December 1st, 2021: Inital project
+/// 
+/// Posting header File on Server - Protoypes and definitions of a post structure
 #pragma once
 
 #define _CRT_SECURE_NO_WARNINGS

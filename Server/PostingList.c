@@ -1,5 +1,17 @@
+///CSCN72020 - Computer Networks Assignment 3 
+///RESTful API in C
+///
+///Gavin Abeele - gabeele2160@conestogac.on.ca
+/// 
+///v1.0 - December 1st, 2021: Inital project
+/// 
+/// PostingList C File on Server - Creates, manages, the list and list items. Included is helper functions
 #include "PostingList.h"
 
+/// <summary>
+/// Creates an empty list
+/// </summary>
+/// <returns>A non-pointer list</returns>
 LISTOFPOSTINGS initalizeListOfPosts() {
 
 	LISTOFPOSTINGS list;
@@ -11,6 +23,12 @@ LISTOFPOSTINGS initalizeListOfPosts() {
 	return list;
 }
 
+/// <summary>
+/// Adds an item to a list
+/// </summary>
+/// <param name="list">The list to add</param>
+/// <param name="author">String of authors name</param>
+/// <param name="topic">String of topic</param>
 void addToList(p_LISTOFPOSTINGS list, char author[], char topic[]) {
 	int id = ++list->maxID;
 
@@ -35,6 +53,11 @@ void addToList(p_LISTOFPOSTINGS list, char author[], char topic[]) {
 
 }
 
+/// <summary>
+/// Removes an item from list
+/// </summary>
+/// <param name="list">List to remove something from</param>
+/// <param name="key">The postingID to remove by</param>
 void deleteFromList(p_LISTOFPOSTINGS list, int key) {
 
 	p_POSTNODE nodeToDelete = searchForNode(list, key);
@@ -69,6 +92,11 @@ void deleteFromList(p_LISTOFPOSTINGS list, int key) {
 	free(nodeToDelete);	//Might have to make a delete for this
 }
 
+/// <summary>
+/// Obtains the length of the list
+/// </summary>
+/// <param name="list">List of postings</param>
+/// <returns>The numerical amount of items in the list</returns>
 int getLength(p_LISTOFPOSTINGS list) {
 
 	int counter = 0;
@@ -82,6 +110,12 @@ int getLength(p_LISTOFPOSTINGS list) {
 		return counter;
 }
 
+/// <summary>
+/// Searh for a node through a key
+/// </summary>
+/// <param name="list">The list to search</param>
+/// <param name="key">The postingID to search by</param>
+/// <returns>A pointer to a node</returns>
 p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 
 	p_POSTNODE node = list->head;
@@ -100,6 +134,10 @@ p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 
 }
 
+/// <summary>
+/// Save the list to a file
+/// </summary>
+/// <param name="list">The list to save</param>
 void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
@@ -130,14 +168,16 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 		
 		node = node->next_node;
 
+
 	} while (node != NULL);
 
 	fclose(filePointer);
 }
 
-
-
-
+/// <summary>
+/// Reads and creates a list from a file location
+/// </summary>
+/// <returns>A non-pointer list</returns>
 LISTOFPOSTINGS readListFromFile() {
 
 	int tempID = 0;
@@ -145,7 +185,7 @@ LISTOFPOSTINGS readListFromFile() {
 	char tempTopic[STRING_MAX];
 	char buf[STRING_MAX];
 
-	LISTOFPOSTINGS list = initalizeListOfPosts();
+	LISTOFPOSTINGS list = initalizeListOfPosts();	
 
 	FILE* filePointer;
 	fopen_s(&filePointer, "PostingList.txt", "r");
@@ -185,6 +225,14 @@ LISTOFPOSTINGS readListFromFile() {
 	return list;
 }
 
+//Helper functions 
+
+/// <summary>
+/// Check if a key is valid in the lsit
+/// </summary>
+/// <param name="list">List to search</param>
+/// <param name="key">The key to validate</param>
+/// <returns>Integer boolean if it was sucessful</returns>
 int keyIsvalid(p_LISTOFPOSTINGS list, int key) {
 	int validFlag = 0;	//0 = false, flag to ensure it is true
 
@@ -204,8 +252,6 @@ int keyIsvalid(p_LISTOFPOSTINGS list, int key) {
 
 	return 0;
 }
-
-//Helper functions 
 
 /// <summary>
 /// Formats string; swap '+' for ' '

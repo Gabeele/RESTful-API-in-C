@@ -4,10 +4,13 @@
 ///Gavin Abeele - gabeele2160@conestogac.on.ca
 /// 
 ///v1.0 - December 1st, 2021: Inital project
+/// 
+/// Server C File on Server - Manages connection functions 
 
 #include "Server.h"
-
-
+/// <summary>
+/// Inializies Windows sockets
+/// </summary>
 void InitlaizeWindowsSockets() {
 
 	WSADATA data;
@@ -19,9 +22,10 @@ void InitlaizeWindowsSockets() {
 
 }
 
+/// <summary>
+/// Creates a addrinfo defined as it's local address
+/// </summary>
 struct addrinfo* ConfigureLocalAddress() {
-	char ip_address[IP_ADDRESS_MAX] = "";
-	char port[PORT_NUMBER_MAX] = "8080";
 	struct addrinfo info;
 	
 	memset(&info, 0, sizeof(info));
@@ -31,11 +35,16 @@ struct addrinfo* ConfigureLocalAddress() {
 	info.ai_flags = AI_PASSIVE;
 
 	struct addrinfo* address;
-	getaddrinfo(0, "8080", &info, &address);
+	getaddrinfo(0, PORT_NUMBER, &info, &address);
 
 	return address;
 }
 
+/// <summary>
+/// Creates the listening socket
+/// </summary>
+/// <param name="address">The addrinfo for local address</param>
+/// <returns>Listening socket</returns>
 SOCKET CreateListeningSocket(struct addrinfo* address) {
 	SOCKET sock; 
 
@@ -57,6 +66,10 @@ SOCKET CreateListeningSocket(struct addrinfo* address) {
 
 }
 
+/// <summary>
+/// Assignes the listening socket
+/// </summary>
+/// <param name="socket">Socket to listen</param>
 void ConnectionListen(SOCKET socket) {
 
 	if (listen(socket, MAXLISTENERS) < 0) {
@@ -66,6 +79,11 @@ void ConnectionListen(SOCKET socket) {
 
 }
 
+/// <summary>
+/// Connects to a client socket
+/// </summary>
+/// <param name="socket">Listening socket</param>
+/// <returns>Client socket</returns>
 SOCKET WaitAndConnect(SOCKET socket) {
 	struct sockaddr_storage client_address;
 	struct sockaddr* socket_address_client = (struct sockaddr*)&client_address;
@@ -84,20 +102,17 @@ SOCKET WaitAndConnect(SOCKET socket) {
 
 	getnameinfo(socket_address_client, length_of_client, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
 
-	printf("Client address is: %s\n", address_buffer);
+	printf("Client connected. Address : %s\n", address_buffer);
 
 	return client_socket;
 }
 
-void SendMessageToSocket(char message[], SOCKET target_socket) {
-
-	if (send(target_socket, message, strlen(message), 0) == 0) {
-		printf("Error: Send failed on client side\n");
-		exit(1);
-	}
-
-}
-
+/// <summary>
+/// Recieves a message from the socket
+/// </summary>
+/// <param name="message">Empty string</param>
+/// <param name="target_socket">The socket to look for data</param>
+/// <returns>The bytes recevied</returns>
 int  ReceiveMessage(char message[], SOCKET target_socket) {
 
 	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
@@ -107,19 +122,30 @@ int  ReceiveMessage(char message[], SOCKET target_socket) {
 	return bytes_received;
 }
 
+/// <summary>
+/// Responds to a request by sending a message
+/// </summary>
+/// <param name="message">Data string of the response</param>
+/// <param name="target_socket">Socket for the intention of the message</param>
 void RespondToClient(char message[], SOCKET target_socket) {
 
 	int bytes_sent = send(target_socket, message, strlen(message), 0);
 
-	
  }
 
+/// <summary>
+/// Closing a socket connection 
+/// </summary>
+/// <param name="socket">The socket to close</param>
 void CloseSocketConnection(SOCKET socket) {
 
 	closesocket(socket);
 
 }
 
+/// <summary>
+/// Cleans up Windows sockets
+/// </summary>
 void WindowsSocketsCleanUp() {
 
 	WSACleanup();

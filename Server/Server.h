@@ -1,3 +1,13 @@
+///CSCN72020 - Computer Networks Assignment 3 
+///RESTful API in C
+///
+///Gavin Abeele - gabeele2160@conestogac.on.ca
+/// 
+///v1.0 - December 1st, 2021: Inital project
+/// 
+/// Server header File on Server - Declaring variables, defines, and protoyping 
+
+
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
 
@@ -15,7 +25,9 @@
 
 #define IP_ADDRESS_MAX 16
 #define PORT_NUMBER_MAX 4
-#define STRING_BUFFER 2048
+#define IP_ADDRESS "127.0.0.1"
+#define PORT_NUMBER "8080"
+#define STRING_BUFFER 2048	//Large number so data from browsers and command lines do not fill the buffer
 #define MAXLISTENERS 10
 
 typedef enum connection_type
@@ -37,8 +49,6 @@ SOCKET WaitAndConnect(SOCKET);
 void CloseSocketConnection(SOCKET);
 
 void WindowsSocketsCleanUp();
-
-void SendMessageToSocket(char[], SOCKET );
 
 int ReceiveMessage(char[], SOCKET);
 
