@@ -25,6 +25,7 @@ int menu(SOCKET target_socket) {
 		char request[STRING_BUFFER];
 		char author[INPUT_BUFFER];
 		char topic[INPUT_BUFFER];
+		char postBody[INPUT_BUFFER_POSTBODY];
 		char keystr[INPUT_BUFFER];
 		int key;
 
@@ -52,7 +53,10 @@ int menu(SOCKET target_socket) {
 			printf("\nTopic: ");
 			fgets(topic, INPUT_BUFFER, stdin);
 
-			buildPOSTRequest(request, author, topic);
+			printf("\nPost Body (255 Character max): ");
+			fgets(postBody, INPUT_BUFFER_POSTBODY, stdin);
+
+			buildPOSTRequest(request, author, topic, postBody);
 			SendMessageToSocket(request, target_socket);
 
 			break;
@@ -88,7 +92,10 @@ int menu(SOCKET target_socket) {
 			printf("\nTopic: ");
 			fgets(topic, INPUT_BUFFER, stdin);
 
-			buildPUTRequest(request, author, topic, key);
+			printf("\nPost Body (255 Character max): ");
+			fgets(postBody, INPUT_BUFFER_POSTBODY, stdin);
+
+			buildPUTRequest(request, author, topic, postBody, key);
 			SendMessageToSocket(request, target_socket);
 			break;
 		case '6':	//Get Filter

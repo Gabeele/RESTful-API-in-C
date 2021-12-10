@@ -16,6 +16,7 @@
 #include "Client.h"
 
 #define INPUT_BUFFER 100
+#define INPUT_BUFFER_POSTBODY 256
 
 int menu(SOCKET);
 

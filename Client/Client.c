@@ -125,16 +125,18 @@ void WindowsSocketsCleanUp() {
 /// <param name="request">Empty string where the reqest can eb appended</param>
 /// <param name="author">Authors Name</param>
 /// <param name="topic">Topic</param>
-void buildPOSTRequest(char request[], char author[], char topic[]) {
+/// <param name="postBody">The body of the posting</param>
+void buildPOSTRequest(char request[], char author[], char topic[], char postBody[]) {
 
 	stringFormat(author);
 	stringFormat(topic);
+	stringFormat(postBody);
 
 	sprintf(request, "POST /posts HTTP/1.1\r\n");
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
-	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
+	sprintf(request + strlen(request), "author=%s&topic=%s&postbody=%s\r\n", author, topic, postBody);
 
 }
 
@@ -189,16 +191,18 @@ void buildGETFilterRequest(char request[], char keyword[])
 /// <param name="author">A string of the updated authors name</param>
 /// <param name="topic">A string of the updated topic</param>
 /// <param name="key">Posting ID for which posting to be updated</param>
-void buildPUTRequest(char request[], char author[], char topic[], int key) {
+/// <param name="postBody">The body of the posting</param>
+void buildPUTRequest(char request[], char author[], char topic[], char postBody[], int key) {
 
 	stringFormat(author);
 	stringFormat(topic);
+	stringFormat(postBody);
 
 	sprintf(request, "PUT /posts/%d HTTP/1.1\r\n", key);
 	sprintf(request + strlen(request), "Host: %s:%s\r\n", IP_ADDRESS, PORT_NUMBER);
 	sprintf(request + strlen(request), "User-Agent: client.exe 1.0\r\n");
 	sprintf(request + strlen(request), "\r\n\r\n");
-	sprintf(request + strlen(request), "author=%s&topic=%s\r\n", author, topic);
+	sprintf(request + strlen(request), "author=%s&topic=%s&postbody=%s\r\n", author, topic, postBody);
 
 }
 

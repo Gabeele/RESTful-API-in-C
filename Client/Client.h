@@ -44,7 +44,7 @@ void CloseSocketConnection(SOCKET);
 
 void WindowsSocketsCleanUp();
 
-void buildPOSTRequest(char[], char[], char[]);
+void buildPOSTRequest(char[], char[], char[], char[]);
 
 void buildGETRequest(char[], int);
 
@@ -52,7 +52,7 @@ void buildGETCollectionRequest(char[]);
 
 void buildGETFilterRequest(char[], char[]);
 
-void buildPUTRequest(char[], char[], char[], int);
+void buildPUTRequest(char[], char[], char[], char[], int);
 
 void buildDELETERequest(char[], int);
 
