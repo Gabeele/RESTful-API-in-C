@@ -38,9 +38,6 @@ void stringDeformat(char[]);
 
 void stringFormat(char[]);
 
-
-
-
-
+void freeList(p_LISTOFPOSTINGS);
 
 

@@ -89,7 +89,7 @@ void deleteFromList(p_LISTOFPOSTINGS list, int key) {
 		
 	}
 
-	free(nodeToDelete);	//Might have to make a delete for this
+	freeNode(currentNode);
 }
 
 /// <summary>
@@ -141,7 +141,7 @@ p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
-	char tempAuthor[STRING_MAX], tempTopic[STRING_MAX];
+	char tempAuthor[STRING_POST_MAX], tempTopic[STRING_POST_MAX];
 	int tempPosting;
 
 	fopen_s(&filePointer, "PostingList.txt", "w+");
@@ -158,8 +158,8 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 	do{
 	
 		tempPosting = getPostingID(node->data);	//Set the temps to allow spaces in loading and saving
-		strcpy(tempAuthor, getAuthor(node->data));
-		strcpy(tempTopic, getTopic(node->data));
+		strcpy_s(tempAuthor, STRING_POST_MAX, getAuthor(node->data));
+		strcpy_s(tempTopic, STRING_POST_MAX, getTopic(node->data));
 
 		stringFormat(tempAuthor);
 		stringFormat(tempTopic);
@@ -181,9 +181,9 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 LISTOFPOSTINGS readListFromFile() {
 
 	int tempID = 0;
-	char tempAuthor[STRING_MAX];
-	char tempTopic[STRING_MAX];
-	char buf[STRING_MAX];
+	char tempAuthor[STRING_POST_MAX];
+	char tempTopic[STRING_POST_MAX];
+	char buf[STRING_POST_MAX];
 
 	LISTOFPOSTINGS list = initalizeListOfPosts();	
 
@@ -221,9 +221,33 @@ LISTOFPOSTINGS readListFromFile() {
 
 	}
 	
+
+
 	fclose(filePointer);
 	return list;
 }
+
+/// <summary>
+/// Frees the list from memory
+/// </summary>
+/// <param name="list">List to be freed</param>
+void freeList(p_LISTOFPOSTINGS list) {
+
+	p_POSTNODE currentNode = list->head;
+	p_POSTNODE previousNode = list->head;
+
+	while (currentNode != NULL) {
+
+		previousNode = currentNode;
+
+		currentNode = currentNode->next_node;
+
+		freeNode(previousNode);
+
+	}
+
+}
+
 
 //Helper functions 
 

@@ -22,9 +22,9 @@ POST createPost(int id, char author[], char topic[]) {
 
 	post.postingID = id;
 
-	strcpy_s(post.author, STRING_MAX, author);
+	strcpy_s(post.author, STRING_POST_MAX, author);
 
-	strcpy_s(post.topic, STRING_MAX, topic);
+	strcpy_s(post.topic, STRING_POST_MAX, topic);
 	
 	return post;
 }
@@ -65,7 +65,7 @@ char* getTopic(POST post) {
 /// <param name="post">Post to update</param>
 /// <param name="author">New authors name</param>
 void setAuthor(p_POST post, char author[]) {
-	strcpy(post->author, author);
+	strcpy_s(post->author, STRING_POST_MAX,  author);
 
 }
 
@@ -75,6 +75,6 @@ void setAuthor(p_POST post, char author[]) {
 /// <param name="post">Post to update</param>
 /// <param name="topic">New topic</param>
 void setTopic(p_POST post, char topic[]) {
-	strcpy(post->topic, topic);
+	strcpy_s(post->topic, STRING_POST_MAX, topic);
 
 }

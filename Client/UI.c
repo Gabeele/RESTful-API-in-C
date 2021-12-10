@@ -131,7 +131,7 @@ int menu(SOCKET target_socket) {
 /// </summary>
 void pressToContinute() {
 
-	printf("Press any key to continute...");
+	printf("\nPress any key to continute...\n");
 
 	getchar();
 }

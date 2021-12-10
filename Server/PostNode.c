@@ -26,3 +26,11 @@ p_POSTNODE createNode(POST post) {
 
 	return node;
 }
+
+/// <summary>
+/// Frees the selected node
+/// </summary>
+/// <param name="node">Node to be free</param>
+void freeNode(p_POSTNODE node) {
+	free(node);
+}

@@ -9,6 +9,8 @@
 
 #include "RestServices.h"
 
+// TODO: Clear all _s values
+
 int main(void) {
 	
 	printf("Initalize Windows socket...\n\n");
@@ -30,7 +32,7 @@ int main(void) {
 	LISTOFPOSTINGS list = readListFromFile();
 	printf("Data loaded...\n\n");
 
-	printf("Data loaded...\n\n");
+	printf("Waiting for requests...\n\n");
 	while (1) {
 
 	char request[STRING_BUFFER];
@@ -41,15 +43,21 @@ int main(void) {
 			printf("Client connection closed.");
 			break;
 		}
-
+		printf("Request received. Parsing and building response...\n\n");
 		parsePayloadAndAction(&list, client_socket, request);
 
 	}
 
+	printf("Closing socket connections...\n\n");
 	CloseSocketConnection(client_socket);
 
+	printf("Saving server data to file...\n\n");
 	saveListToFile(&list);
 
+	printf("Freeing memory...\n\n");
+	freeList(&list);
+
+	printf("Cleaning Windows sockets\n\n");
 	WindowsSocketsCleanUp();
 	return 0;
 }

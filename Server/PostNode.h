@@ -18,5 +18,6 @@ typedef struct postNode {
 
 p_POSTNODE createNode(Post);
 
+void freeNode(p_POSTNODE);
 
 

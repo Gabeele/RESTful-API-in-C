@@ -8,7 +8,7 @@
 /// Server header File on Server - Declaring variables, defines, and protoyping 
 
 
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 #pragma once
 
 #define _WIN32_WINNT 0x6000
