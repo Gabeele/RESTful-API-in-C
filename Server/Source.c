@@ -32,17 +32,19 @@ int main(void) {
 	LISTOFPOSTINGS list = readListFromFile();
 	printf("Data loaded...\n\n");
 
-	printf("Waiting for requests...\n\n");
+	
 	while (1) {
 
-	char request[STRING_BUFFER];
-	memset(request, '\0', 2048);
+		char request[STRING_BUFFER];
+		memset(request, '\0', 2048);
 
+		printf("Waiting for requests...\n\n");
 		int bytes_received = ReceiveMessage(request, client_socket);	
 		if (bytes_received < 1) {	//Client closes when the bytes received is less than 1
-			printf("Client connection closed.");
+			printf("Client connection closed.\n\n");
 			break;
 		}
+
 		printf("Request received. Parsing and building response...\n\n");
 		parsePayloadAndAction(&list, client_socket, request);
 
@@ -57,7 +59,7 @@ int main(void) {
 	printf("Freeing memory...\n\n");
 	freeList(&list);
 
-	printf("Cleaning Windows sockets\n\n");
+	printf("Cleaning Windows sockets...\n\n");
 	WindowsSocketsCleanUp();
 	return 0;
 }

@@ -32,7 +32,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 	char data[STRING_BUFFER];	
 	char response[STRING_BUFFER];
 
-	if (sscanf(payload, "%s %s HTTP/1.1\r\n", method, path) == EOF) {	//Obtains the method and path
+	if (sscanf_s(payload, "%s %s HTTP/1.1\r\n", method, STRING_BUFFER, path, STRING_BUFFER) == EOF) {	//Obtains the method and path
 		getResponseHeader(Not_Found, response);
 		RespondToClient(response, client_socket);
 		return;
@@ -60,7 +60,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 		
 		splitBody(body, author, topic);
 
-		sscanf(path, "/posts/%d", &key);	//Obtains the path postingID
+		sscanf_s(path, "/posts/%d", &key);	//Obtains the path postingID
 
 		if (put(list, key, author, topic) == 1) {
 			getResponseHeader(OK, response);
@@ -78,11 +78,11 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 
 		if (strstr(path, "/posts/")) {
 			
-			sscanf(path, "/posts/%s", keystr);	//Obtains the keyword
+			sscanf_s(path, "/posts/%s", keystr, STRING_BUFFER);	//Obtains the keyword
 
 			stringDeformat(keystr);	
 			
-			if (sscanf(keystr, "%d", &key)== 1) {	//Checks if the keystr is a number
+			if (sscanf_s(keystr, "%d", &key)== 1) {	//Checks if the keystr is a number
 
 				key = atoi(keystr);
 
@@ -133,7 +133,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 		
 	}
 	else if (strcmp(method, "DELETE") == 0) {	//When the method is DELETE it will remove the posting with the ID
-		sscanf(path, "/posts/%d", &key);
+		sscanf_s(path, "/posts/%d", &key);
 
 		if (delete(list, key) == 1) {
 			getResponseHeader(OK, response);
@@ -323,7 +323,7 @@ void splitBody(char body[], char author[], char topic[]) {
 		i++;
 	}
 
-	sscanf(body, "\r\n\r\nauthor=%s topic=%s", author, topic);	//Sets the author and topic to char pointers
+	sscanf_s(body, "\r\n\r\nauthor=%s topic=%s", author, STRING_POST_MAX, topic, STRING_POST_MAX);	//Sets the author and topic to char pointers
 
 	stringDeformat(author);
 
