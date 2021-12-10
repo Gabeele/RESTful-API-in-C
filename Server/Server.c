@@ -102,7 +102,7 @@ SOCKET WaitAndConnect(SOCKET socket) {
 
 	getnameinfo(socket_address_client, length_of_client, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
 
-	printf("\nClient connected. Address : %s\n", address_buffer);
+	printf("Client connected.Address : % s\n\n", address_buffer);
 
 	return client_socket;
 }
