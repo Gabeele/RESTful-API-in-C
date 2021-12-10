@@ -92,14 +92,15 @@ void SendMessageToSocket(char message[], SOCKET target_socket) {
 int ReceiveMessageFromSocket(char message[], SOCKET target_socket) {
 
 	printf("Raw Data Received---------------------------------------------------------------\n\n");
+	int bytes_receviced;
 
-	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
+		bytes_receviced = recv(target_socket, message, STRING_BUFFER, 0);
 
-	printf("%.*s", bytes_received, message);
+	printf("%.*s", bytes_receviced, message);
 	
-	printf("\n--------------------------------------------------------------------------------\n");
+	printf("--------------------------------------------------------------------------------\n\n");	
 
-	return bytes_received;
+	return bytes_receviced;
 }
 
 /// <summary>

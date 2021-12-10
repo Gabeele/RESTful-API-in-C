@@ -28,6 +28,7 @@ void main() {
 
 		if (menu(target_socket) == 1) {
 			SendMessageToSocket(ZERO_BYTE_MESSAGE, target_socket);	//Sends a zero byte message to close
+			
 			break;
 
 		}

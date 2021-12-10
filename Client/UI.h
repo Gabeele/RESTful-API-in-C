@@ -8,6 +8,8 @@
 /// 
 ///UI header File on Client - Oragnizes and protoypes the UI
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #pragma once
 
 #include <stdlib.h>
@@ -17,6 +19,7 @@
 
 #define INPUT_BUFFER 100
 #define INPUT_BUFFER_POSTBODY 256
+#define STRING_BUFFER 256
 
 int menu(SOCKET);
 
