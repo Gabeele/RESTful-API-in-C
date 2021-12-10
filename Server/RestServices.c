@@ -159,6 +159,7 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 /// <param name="list">The list to add to</param>
 /// <param name="author">Authors name</param>
 /// <param name="topic">Topic of the subject</param>
+/// <param name="postBody">Body of the message</param>
 /// <returns>Boolean integer if successful<</returns>
 int post(p_LISTOFPOSTINGS list, char author[], char topic[], char postBody[]) {
 
@@ -263,7 +264,8 @@ int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
 /// <param name="list">The list of postings</param>
 /// <param name="key">PostingID of what to update</param>
 /// <param name="author">New author</param>
-/// <param name="topic">New Topic</param>
+/// <param name="topic">New topic</param>
+/// <param name="postBody">New body</param>
 /// <returns>Boolean integer if successfu</returns>
 int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[], char postBody[]) {
 	
@@ -313,6 +315,7 @@ int delete(p_LISTOFPOSTINGS list, int key) {
 /// <param name="body">The body of the request</param>
 /// <param name="author">Empty author string</param>
 /// <param name="topic">Empty topic string</param>
+/// <param name="postBody">Empty postBody string</param>
 void splitBody(char body[], char author[], char topic[], char postBody[]) {
 
 	int i = 0;
