@@ -25,8 +25,9 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 	//Payload data
 	char keystr[STRING_BUFFER];
 	int key;
-	char  author[STRING_BUFFER];
+	char author[STRING_BUFFER];
 	char topic[STRING_BUFFER];
+	char postBody[STRING_BUFFER];
 
 	//Response to request
 	char data[STRING_BUFFER];	
@@ -42,9 +43,9 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 
 	if (strcmp(method, "POST") == 0) {	//When the method is POST the system will add a new post to the linked list
 		
-		splitBody(body, author, topic);	
+		splitBody(body, author, topic, postBody);	
 
-		if (post(list, author, topic) == 1) {	
+		if (post(list, author, topic, postBody) == 1) {	
 			getResponseHeader(Created, response);
 			RespondToClient(response, client_socket);
 			return;
@@ -58,11 +59,11 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 	}
 	else if (strcmp(method, "PUT") == 0) {	//When the method is PUT it will update the entry which was selected using the key
 		
-		splitBody(body, author, topic);
+		splitBody(body, author, topic, postBody);
 
 		sscanf_s(path, "/posts/%d", &key);	//Obtains the path postingID
 
-		if (put(list, key, author, topic) == 1) {
+		if (put(list, key, author, topic, postBody) == 1) {
 			getResponseHeader(OK, response);
 			RespondToClient(response, client_socket);
 			return;
@@ -159,9 +160,9 @@ void parsePayloadAndAction(p_LISTOFPOSTINGS list, SOCKET client_socket, char pay
 /// <param name="author">Authors name</param>
 /// <param name="topic">Topic of the subject</param>
 /// <returns>Boolean integer if successful<</returns>
-int post(p_LISTOFPOSTINGS list, char author[], char topic[]) {
+int post(p_LISTOFPOSTINGS list, char author[], char topic[], char postBody[]) {
 
-	addToList(list, author, topic);
+	addToList(list, author, topic, postBody);
 
 	return 1;
 }
@@ -184,7 +185,7 @@ int getAll(p_LISTOFPOSTINGS list, char data[])
 
 	while (node != NULL) {
 
-		sprintf(data + strlen(data), "\t{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
+		sprintf(data + strlen(data), "\t{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\", \"body\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data), getBody(node->data));
 
 		node = node->next_node;
 	}
@@ -209,7 +210,7 @@ int get(p_LISTOFPOSTINGS list, int key, char data[]) {
 
 	p_POSTNODE node = searchForNode(list, key);
 
-	sprintf(data, "{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\"}", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
+	sprintf(data, "{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\", \"body\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data), getBody(node->data));
 
 	return 1;
 }
@@ -234,9 +235,9 @@ int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
 		if (node == NULL) {
 			break;
 		}
-		else if ((strstr(getAuthor(node->data), keyword) || (strstr(getTopic(node->data), keyword)))) {
+		else if ((strstr(getAuthor(node->data), keyword) || (strstr(getTopic(node->data), keyword)) || (strstr(getBody(node->data), keyword)))) {
 			
-			sprintf(data + strlen(data), "\t{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data));
+			sprintf(data + strlen(data), "\t{\"id\":\"%d\", \"author\":\"%s\", \"topic\":\"%s\", \"body\":\"%s\"}\n", getPostingID(node->data), getAuthor(node->data), getTopic(node->data), getBody(node->data));
 
 			isFoundFlag = 1; 
 
@@ -264,7 +265,7 @@ int getFilter(p_LISTOFPOSTINGS list, char keyword[], char data[])
 /// <param name="author">New author</param>
 /// <param name="topic">New Topic</param>
 /// <returns>Boolean integer if successfu</returns>
-int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
+int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[], char postBody[]) {
 	
 	if (!keyIsvalid(list, key)) {
 		return 0;
@@ -278,6 +279,8 @@ int put(p_LISTOFPOSTINGS list, int key, char author[], char topic[]) {
 	setAuthor(&node->data, author);
 
 	setTopic(&node->data, topic);
+
+	setBody(&node->data, postBody);
 
 	return 1;
 }
@@ -310,24 +313,26 @@ int delete(p_LISTOFPOSTINGS list, int key) {
 /// <param name="body">The body of the request</param>
 /// <param name="author">Empty author string</param>
 /// <param name="topic">Empty topic string</param>
-void splitBody(char body[], char author[], char topic[]) {
+void splitBody(char body[], char author[], char topic[], char postBody[]) {
 
 	int i = 0;
 
 	while (i < strlen(body)) {	//Replaces the '&' with ' ' (Splits the string)
 		if (body[i] == '&') {
 			body[i] = ' ';
-			break;
+			
 		}
 
 		i++;
 	}
 
-	sscanf_s(body, "\r\n\r\nauthor=%s topic=%s", author, STRING_POST_MAX, topic, STRING_POST_MAX);	//Sets the author and topic to char pointers
+	sscanf_s(body, "\r\n\r\nauthor=%s topic=%s postbody=%s", author, STRING_POST_MAX, topic, STRING_POST_MAX, postBody, STRING_POST_MAX);	//Sets the author and topic to char pointers
 
 	stringDeformat(author);
 
 	stringDeformat(topic);
+
+	stringDeformat(postBody);
 
 }
 

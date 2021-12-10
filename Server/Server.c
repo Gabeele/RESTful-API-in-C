@@ -102,7 +102,7 @@ SOCKET WaitAndConnect(SOCKET socket) {
 
 	getnameinfo(socket_address_client, length_of_client, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
 
-	printf("Client connected.Address : % s\n\n", address_buffer);
+	printf("Client connected. Address: %s\n\n", address_buffer);
 
 	return client_socket;
 }
@@ -115,9 +115,13 @@ SOCKET WaitAndConnect(SOCKET socket) {
 /// <returns>The bytes recevied</returns>
 int  ReceiveMessage(char message[], SOCKET target_socket) {
 
+	printf("Raw Data Received---------------------------------------------------------------\n\n");
+
 	int bytes_received = recv(target_socket, message, STRING_BUFFER, 0);
 
 	printf("%.*s\n", bytes_received, message);
+
+	printf("\n--------------------------------------------------------------------------------\n\n");
 
 	return bytes_received;
 }
@@ -128,6 +132,8 @@ int  ReceiveMessage(char message[], SOCKET target_socket) {
 /// <param name="message">Data string of the response</param>
 /// <param name="target_socket">Socket for the intention of the message</param>
 void RespondToClient(char message[], SOCKET target_socket) {
+
+	printf("Response sent. \n\n");
 
 	int bytes_sent = send(target_socket, message, strlen(message), 0);
 

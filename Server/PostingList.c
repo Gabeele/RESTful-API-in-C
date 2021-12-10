@@ -29,10 +29,10 @@ LISTOFPOSTINGS initalizeListOfPosts() {
 /// <param name="list">The list to add</param>
 /// <param name="author">String of authors name</param>
 /// <param name="topic">String of topic</param>
-void addToList(p_LISTOFPOSTINGS list, char author[], char topic[]) {
+void addToList(p_LISTOFPOSTINGS list, char author[], char topic[], char body[]) {
 	int id = ++list->maxID;
 
-	POST posting = createPost(id, author, topic);
+	POST posting = createPost(id, author, topic, body);
 
 	p_POSTNODE node = createNode(posting);
 
@@ -141,13 +141,13 @@ p_POSTNODE searchForNode(p_LISTOFPOSTINGS list, int key) {
 void saveListToFile(p_LISTOFPOSTINGS list) {
 	FILE *filePointer;
 
-	char tempAuthor[STRING_POST_MAX], tempTopic[STRING_POST_MAX];
+	char tempAuthor[STRING_POST_MAX], tempTopic[STRING_POST_MAX], tempBody[STRING_POST_MAX];
 	int tempPosting;
 
 	fopen_s(&filePointer, "PostingList.txt", "w+");
 
 	if (filePointer == NULL) {
-		printf("Error: File creating and saving sensed an error");
+		printf("Error: File creating and saving sensed an error\n");
 		exit(1);
 	}
 
@@ -160,11 +160,13 @@ void saveListToFile(p_LISTOFPOSTINGS list) {
 		tempPosting = getPostingID(node->data);	//Set the temps to allow spaces in loading and saving
 		strcpy_s(tempAuthor, STRING_POST_MAX, getAuthor(node->data));
 		strcpy_s(tempTopic, STRING_POST_MAX, getTopic(node->data));
+		strcpy_s(tempBody, STRING_POST_MAX, getBody(node->data));
 
 		stringFormat(tempAuthor);
 		stringFormat(tempTopic);
+		stringFormat(tempBody);
 
-		fprintf(filePointer, "%d %s %s\n", tempPosting, tempAuthor, tempTopic);
+		fprintf(filePointer, "%d %s %s %s\n", tempPosting, tempAuthor, tempTopic, tempBody);
 		
 		node = node->next_node;
 
@@ -183,6 +185,7 @@ LISTOFPOSTINGS readListFromFile() {
 	int tempID = 0;
 	char tempAuthor[STRING_POST_MAX];
 	char tempTopic[STRING_POST_MAX];
+	char tempBody[STRING_POST_MAX];
 	char buf[STRING_POST_MAX];
 
 	LISTOFPOSTINGS list = initalizeListOfPosts();	
@@ -191,18 +194,19 @@ LISTOFPOSTINGS readListFromFile() {
 	fopen_s(&filePointer, "PostingList.txt", "r");
 
 	if (filePointer == NULL) {
-		printf("Error: File does not exists");
-		return list;
+		printf("Error: File does not exists. Creating a file...\n\n");
+		return list;	//Returns the empty list if there isn't a file
 	}
 
 	fscanf_s(filePointer, "%d\n", &list.maxID);
 
-	while (fscanf(filePointer, "%d %s %s\n", &tempID, tempAuthor, tempTopic) != EOF) {
+	while (fscanf(filePointer, "%d %s %s %s\n", &tempID, tempAuthor, tempTopic, tempBody) != EOF) {
 
 		stringDeformat(tempAuthor);
 		stringDeformat(tempTopic);
+		stringDeformat(tempBody);
 
-		POST post = createPost(tempID, tempAuthor, tempTopic);
+		POST post = createPost(tempID, tempAuthor, tempTopic, tempBody);
 		p_POSTNODE node = createNode(post);
 
 		if (list.head == NULL) {

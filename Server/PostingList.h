@@ -18,7 +18,7 @@ typedef struct listOfPostings {
 
 LISTOFPOSTINGS initalizeListOfPosts();
 
-void addToList(p_LISTOFPOSTINGS, char[], char[]);
+void addToList(p_LISTOFPOSTINGS, char[], char[], char[]);
 
 void deleteFromList(p_LISTOFPOSTINGS, int);
 

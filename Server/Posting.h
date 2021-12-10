@@ -14,16 +14,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_POST_MAX 250
+#define STRING_POST_MAX 256
 
 typedef struct post {
 	int postingID;
 	char author[STRING_POST_MAX];
 	char topic[STRING_POST_MAX];
+	char body[STRING_POST_MAX];
 
 }*p_POST, POST;
 
-POST createPost(int, char[], char[]);
+POST createPost(int, char[], char[], char[]);
 
 int getPostingID(POST);
 
@@ -31,6 +32,10 @@ char* getAuthor(POST);
 
 char* getTopic(POST);
 
+char* getBody(POST);
+
 void setAuthor(p_POST, char[]);
 
 void setTopic(p_POST, char[]);
+
+void setBody(p_POST, char[]);

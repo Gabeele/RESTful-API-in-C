@@ -23,7 +23,7 @@ enum response_codes
 
 void parsePayloadAndAction(p_LISTOFPOSTINGS, SOCKET, char[]);
 
-int post(p_LISTOFPOSTINGS list, char[], char[]); //Create
+int post(p_LISTOFPOSTINGS, char[], char[], char[]); //Create
 
 int getAll(p_LISTOFPOSTINGS, char[]);	//Get collection
 
@@ -31,12 +31,12 @@ int get(p_LISTOFPOSTINGS, int, char[]);	//Get post
 
 int getFilter(p_LISTOFPOSTINGS, char[], char[]);
 
-int put(p_LISTOFPOSTINGS, int, char[], char[]);	//Update
+int put(p_LISTOFPOSTINGS, int, char[], char[], char[]);	//Update
 
 int delete(p_LISTOFPOSTINGS, int);	//Delete
 
 void stringDeformat(char[]);
 
-void splitBody(char[], char[], char[]);
+void splitBody(char[], char[], char[], char[]);
 
 void getResponseHeader(int, char[]);
